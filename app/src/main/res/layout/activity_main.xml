@@ -44,7 +44,7 @@
 
                 app:icon="@drawable/search"
                 app:iconGravity="textStart"
-                app:iconPadding="@dimen/icons"
+                app:iconPadding="@dimen/icons_and_settings"
                 app:iconTint="@color/black"
                 app:cornerRadius="@dimen/otstup_knopok"
 
@@ -63,7 +63,7 @@
 
                 app:icon="@drawable/mediateka"
                 app:iconGravity="textStart"
-                app:iconPadding="@dimen/icons"
+                app:iconPadding="@dimen/icons_and_settings"
                 app:iconTint="@color/black"
                 app:cornerRadius="@dimen/otstup_knopok"/>
 
@@ -81,7 +81,7 @@
 
                 app:icon="@drawable/settings"
                 app:iconGravity="textStart"
-                app:iconPadding="@dimen/icons"
+                app:iconPadding="@dimen/icons_and_settings"
                 app:iconTint="@color/black"
                 app:cornerRadius="@dimen/otstup_knopok" />
         </LinearLayout>
