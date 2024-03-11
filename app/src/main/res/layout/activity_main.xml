@@ -31,6 +31,7 @@
 
             >
             <Button
+                android:id="@+id/search_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -50,6 +51,7 @@
 
                 />
             <Button
+                android:id="@+id/mediateka_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,6 +70,7 @@
                 app:cornerRadius="@dimen/otstup_knopok"/>
 
             <Button
+                android:id="@+id/settings_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
