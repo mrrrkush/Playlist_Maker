@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="otstup_knopok">16dp</dimen>
+    <dimen name="icons_and_settings">12dp</dimen>
+    <dimen name="text_main">22sp</dimen>
+    <dimen name="text_settings">16sp</dimen>
+    <dimen name="settings_height">61dp</dimen>
+
+</resources>
