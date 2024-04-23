@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/settingsBackground"
+    android:orientation="vertical"
     tools:context=".SearchActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <ImageView
+            android:id="@+id/back_from_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/iconsBackArrow" />
+
+        <TextView
+            style="@style/settingsName"
+            android:text="@string/search"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/search_radius_padding">
+
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@style/searchEditText"
+            android:drawableStart="@drawable/search_mini" />
+
+        <ImageButton
+            android:id="@+id/clearSearchButton"
+            style="@style/clearSearchButton"
+            android:layout_gravity="end|center_vertical"/>
+
+    </FrameLayout>
+
+</LinearLayout>
