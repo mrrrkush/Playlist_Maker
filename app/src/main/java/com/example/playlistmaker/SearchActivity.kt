@@ -13,6 +13,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
@@ -34,6 +37,11 @@ class SearchActivity : AppCompatActivity() {
         val searchEditText: EditText = findViewById(R.id.searchEditText)
         val clearButton: ImageButton = findViewById(R.id.clearSearchButton)
 
+        val trackList = createTrackList()
+        val trackAdapter = TrackAdapter(trackList)
+        findViewById<RecyclerView>(R.id.recyclerSearch).adapter = trackAdapter
+        findViewById<RecyclerView>(R.id.recyclerSearch).layoutManager = LinearLayoutManager(this)
+
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString("searchText", "")
             searchEditText.setText(searchText)
@@ -47,7 +55,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchText = s.toString()
+                trackAdapter.filter(s.toString())
             }
         })
         clearButton.setOnClickListener {
@@ -67,4 +75,5 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString("searchText", searchText)
         findViewById<EditText>(R.id.searchEditText).setText(searchText)
     }
+
 }

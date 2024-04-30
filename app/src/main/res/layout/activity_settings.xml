@@ -29,9 +29,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="@dimen/settings_height"
+        android:layout_height="@dimen/settings_height_61dp"
         android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/icons_and_settings">
+        android:paddingHorizontal="@dimen/icons_and_settings_12dp">
 
         <TextView
             style="@style/settingsTextDarkTheme"

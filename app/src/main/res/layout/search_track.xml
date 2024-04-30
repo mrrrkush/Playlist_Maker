@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/settings_height_61dp"
+    android:orientation="horizontal"
+    style="@style/settingsBackground">
+
+    <ImageView
+        android:id="@+id/trackCover"
+        android:layout_width="@dimen/image_size_45dp"
+        android:layout_height="@dimen/image_size_45dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_13dp"
+        android:background="@drawable/rounded_track"/>
+
+       <LinearLayout
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:layout_weight="1">
+            <TextView
+                android:id="@+id/trackTitle"
+                style="@style/trackTextStyle"
+                android:layout_marginTop="@dimen/margin_14dp"
+                android:layout_marginHorizontal="@dimen/search_radius_padding_8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/trackArtist"
+                style="@style/trackTextStyleMini"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/search_radius_padding_8dp"
+                android:layout_marginTop="@dimen/margin_1dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:layout_marginTop="@dimen/margin_1dp"
+                android:id="@+id/trackLength"
+                style="@style/trackTextStyleMini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/search_radius_padding_8dp"
+                app:drawableStartCompat="@drawable/dot_icon"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+        <!--android:textAppearance="?attr/textAppearanceListItem" -->
+    <ImageButton
+        android:id="@+id/trackButton"
+        style="@style/iconsAgreement"
+        android:layout_height="@dimen/button_dimen_24dp"
+        android:layout_width="@dimen/button_dimen_24dp"
+        android:layout_marginEnd="@dimen/icons_and_settings_12dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/agreement"
+        android:backgroundTint="@android:color/transparent"/>
+</LinearLayout>
