@@ -15,7 +15,7 @@
         <item name="android:background">@color/black</item>
     </style>
 
-    <style name="settingsBackground">
+    <style name="settingsBackground" parent="Theme.PlaylistMaker">
         <item name="background">@color/black</item>
     </style>
 

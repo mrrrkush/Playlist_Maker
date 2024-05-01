@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/settingsBackground"
+
     android:orientation="vertical"
     tools:context=".SearchActivity">
 
@@ -34,6 +35,7 @@
         <EditText
             android:id="@+id/searchEditText"
             style="@style/searchEditText"
+            android:textCursorDrawable="@drawable/color_cursor"
             android:drawableStart="@drawable/search_mini" />
 
         <ImageButton
