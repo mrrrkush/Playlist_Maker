@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/settingsBackground"
+    android:orientation="vertical"
+    tools:context=".SettingsActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
+<ImageView
+    android:id="@+id/back_from_settings"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    style="@style/iconsBackArrow" />
+
+    <TextView
+        style="@style/settingsName"
+        android:text="@string/settings"
+        />
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/settings_height_61dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/icons_and_settings_12dp">
+
+        <TextView
+            style="@style/settingsTextDarkTheme"
+            android:text="@string/dark_theme" />
+        <Switch
+            android:id="@+id/themeSwitcher"
+            android:theme="@style/SwitchDarkTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    </LinearLayout>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/shareButton"
+        style="@style/iconsShare" />
+
+    <TextView
+        style="@style/settingsText"
+        android:text="@string/share" />
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/supportButton"
+            style="@style/iconsSupport"
+            />
+
+        <TextView
+            style="@style/settingsText"
+            android:text="@string/support"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/agreementButton"
+            style="@style/iconsAgreement"
+            />
+
+        <TextView
+            style="@style/settingsText"
+            android:text="@string/agreement"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

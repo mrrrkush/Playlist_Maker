@@ -1,9 +1,119 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/blue</item>
     </style>
 
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+    <style name="settingsBackground" parent="Theme.PlaylistMaker">
+        <item name="android:background">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="settingsName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAppearance">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_main_22sp</item>
+        <item name="android:padding">@dimen/icons_and_settings_12dp</item>
+
+    </style>
+
+    <style name="settingsTextDarkTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:textSize">@dimen/text_settings_16sp</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+
+    </style>
+
+    <style name="settingsText">
+        <item name="android:paddingHorizontal">@dimen/icons_and_settings_12dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_height_61dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:textSize">@dimen/text_settings_16sp</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+
+
+    </style>
+
+    
+    <style name="iconsShare">
+        <item name="android:src">@drawable/share</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:adjustViewBounds">false</item>
+        <item name="android:cropToPadding">false</item>
+
+    </style>
+
+    <style name="iconsSupport" parent="iconsShare">
+        <item name="android:src">@drawable/support</item>
+
+    </style>
+
+    <style name="iconsAgreement" parent="iconsShare">
+        <item name="android:src">@drawable/agreement</item>
+    </style>
+
+    <style name="iconsBackArrow"><item name="android:src">@drawable/back_arrow</item></style>
+
+    <style name="searchEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_margin">@dimen/search_radius_padding_8dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">30</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:drawableTint">@color/grey_icons</item>
+        <item name="android:drawablePadding">@dimen/search_radius_padding_8dp</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_settings_16sp</item>
+        <item name="android:textColorHint">@color/grey_icons</item>
+        <item name="android:hint">@string/search</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/icons_and_settings_12dp</item>
+        <item name="android:background">@drawable/rounded_edittext</item>
+    </style>
+
+    <style name="clearSearchButton" parent="iconsShare">
+        <item name="android:layout_marginEnd">@dimen/icons_and_settings_12dp</item>
+        <item name="android:src">@drawable/clear_button</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="trackTextStyle">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/black_text</item>
+        <item name="android:textSize">@dimen/song_name_16sp</item>
+    </style>
+    <style name="trackTextStyleMini" parent="trackTextStyle">
+        <item name="android:textSize">@dimen/artist_name_11sp</item>
+        <item name="android:textColor">@color/grey_icons</item>
+        <item name="drawableTint">@color/grey_icons</item>
+    </style>
 </resources>
