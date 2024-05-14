@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter(private var tracksList: List<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(var tracksList: List<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
 
     var filteredTracksList: List<Track> = listOf()
     fun filter(query: String) {
