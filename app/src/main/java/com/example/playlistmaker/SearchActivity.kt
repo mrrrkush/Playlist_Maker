@@ -80,6 +80,7 @@ class SearchActivity : AppCompatActivity() {
                      recyclerSearch.visibility = View.GONE
                      searchEditText.clearFocus()
                      hideKeyboard(searchEditText)
+                     recyclerSearch.adapter = searchAdapter
                  }
              } else {
                  historyText.visibility = View.GONE
@@ -94,6 +95,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         fun searchTrack() {
+            recyclerSearch.adapter = searchAdapter
             val searchText = searchEditText.text.toString()
             if (searchText.isNotEmpty()) {
                 RetrofitInstance.api.search(searchText).enqueue(object : Callback<SearchResponse> {
@@ -157,9 +159,12 @@ class SearchActivity : AppCompatActivity() {
         })
         clearButton.setOnClickListener {
             searchEditText.text.clear()
+            searchEditText.clearFocus()
             val hideKeyboard = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             hideKeyboard.hideSoftInputFromWindow(it.windowToken, 0)
             recyclerSearch.visibility = View.GONE
+            clearHistoryButton.visibility = View.GONE
+            historyText.visibility = View.GONE
             if (nothingFoundStub != null && noConnectionStub != null) {
                 nothingFoundStub.visibility = View.GONE
                 noConnectionStub.visibility = View.GONE
