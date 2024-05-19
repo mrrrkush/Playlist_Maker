@@ -36,18 +36,36 @@
             android:id="@+id/searchEditText"
             style="@style/searchEditText"
             android:textCursorDrawable="@drawable/color_cursor"
-            android:drawableStart="@drawable/search_mini" />
+            android:drawableStart="@drawable/search_mini"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
 
         <ImageButton
             android:id="@+id/clearSearchButton"
             style="@style/clearSearchButton"
             android:layout_gravity="end|center_vertical"/>
-
     </FrameLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerSearch"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/search_track"/>
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/search_track"/>
+
+        <ViewStub
+            android:id="@+id/nothingFoundViewStub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/nothing_found"/>
+
+        <ViewStub
+            android:id="@+id/noConnectionViewStub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/no_connection"/>
+    </FrameLayout>
 </LinearLayout>

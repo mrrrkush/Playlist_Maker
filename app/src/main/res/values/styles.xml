@@ -32,10 +32,5 @@
         <item name="android:textFontWeight">500</item>
 
     </style>
-
-    <style name="SwitchDarkTheme" parent="Theme.AppCompat.DayNight">
-        <item name="colorControlActivated">@color/blue</item>
-        
-    </style>
     
 </resources>
