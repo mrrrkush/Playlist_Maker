@@ -16,4 +16,5 @@
     <dimen name="margin_1dp">1dp</dimen>
     <dimen name="text_19sp">19sp</dimen>
     <dimen name="margin_102dp">102dp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
 </resources>

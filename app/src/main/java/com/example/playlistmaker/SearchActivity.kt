@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewStub
 import android.view.inputmethod.EditorInfo
@@ -14,8 +13,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 
 class SearchActivity : AppCompatActivity() {
@@ -46,12 +48,45 @@ class SearchActivity : AppCompatActivity() {
         val clearButton: ImageButton = findViewById(R.id.clearSearchButton)
 
         val trackList = mutableListOf<Track>()
-        val trackAdapter = TrackAdapter(trackList)
+
         val nothingFoundStub: ViewStub? = findViewById(R.id.nothingFoundViewStub)
         val noConnectionStub: ViewStub? = findViewById(R.id.noConnectionViewStub)
         val recyclerSearch: RecyclerView = findViewById(R.id.recyclerSearch)
-        recyclerSearch.adapter = trackAdapter
+        val historyText: TextView = findViewById(R.id.historyText)
+        val clearHistoryButton: AppCompatButton = findViewById(R.id.clearHistoryButton)
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPreferences)
+        val searchAdapter = TrackAdapter(trackList, searchHistory)
+        recyclerSearch.adapter = searchAdapter
         recyclerSearch.layoutManager = LinearLayoutManager(this)
+
+        val historyAdapter = TrackAdapter(searchHistory.getHistory(), searchHistory)
+
+        fun updateHistory() {
+            historyAdapter.submitList(searchHistory.getHistory())
+        }
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+             if (hasFocus && searchEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
+                 historyText.visibility = View.VISIBLE
+                 recyclerSearch.visibility = View.VISIBLE
+                 recyclerSearch.adapter = historyAdapter
+                 clearHistoryButton.visibility = View.VISIBLE
+                 updateHistory()
+                 clearHistoryButton.setOnClickListener {
+                     searchHistory.clearHistory()
+                     updateHistory()
+                     historyText.visibility = View.GONE
+                     clearHistoryButton.visibility = View.GONE
+                     recyclerSearch.visibility = View.GONE
+                     searchEditText.clearFocus()
+                     hideKeyboard(searchEditText)
+                 }
+             } else {
+                 historyText.visibility = View.GONE
+                 clearHistoryButton.visibility = View.GONE
+                 recyclerSearch.adapter = searchAdapter
+             }
+        }
 
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString("searchText", "")
@@ -60,7 +95,6 @@ class SearchActivity : AppCompatActivity() {
 
         fun searchTrack() {
             val searchText = searchEditText.text.toString()
-            Log.d("searchTrack", "ищем")
             if (searchText.isNotEmpty()) {
                 RetrofitInstance.api.search(searchText).enqueue(object : Callback<SearchResponse> {
                     override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
@@ -69,7 +103,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackList.addAll(response.body()?.results!!)
-                            trackAdapter.submitList(trackList)
+                            searchAdapter.submitList(trackList)
                             recyclerSearch.visibility = View.VISIBLE
                             nothingFoundStub?.visibility = View.GONE
                         }
@@ -84,7 +118,6 @@ class SearchActivity : AppCompatActivity() {
                         if (noConnectionStub?.parent != null) noConnectionStub.inflate() else noConnectionStub?.visibility = View.VISIBLE
                         val updateButton = findViewById<Button>(R.id.updateButton)
                         updateButton.setOnClickListener {
-                            Log.d("updateButton", "нажато")
                             searchTrack()
                             noConnectionStub?.visibility = View.GONE
                             recyclerSearch.visibility = View.VISIBLE
@@ -109,7 +142,17 @@ class SearchActivity : AppCompatActivity() {
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                trackAdapter.filter(s.toString())
+                searchAdapter.filter(s.toString())
+                    if (searchEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory().isNotEmpty()) {
+                        historyText.visibility = View.VISIBLE
+                        recyclerSearch.visibility = View.VISIBLE
+                        recyclerSearch.adapter = historyAdapter
+                        clearHistoryButton.visibility = View.VISIBLE
+                    } else {
+                        historyText.visibility = View.GONE
+                        clearHistoryButton.visibility = View.GONE
+                        recyclerSearch.adapter = searchAdapter
+                    }
             }
         })
         clearButton.setOnClickListener {
@@ -123,7 +166,8 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-    fun hideKeyboard(view: View) {
+
+    private fun hideKeyboard(view: View) {
         val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }

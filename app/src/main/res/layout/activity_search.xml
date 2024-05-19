@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/settingsBackground"
-
     android:orientation="vertical"
     tools:context=".SearchActivity">
 
@@ -46,15 +45,41 @@
             android:layout_gravity="end|center_vertical"/>
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/historyText"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:paddingHorizontal="@dimen/otstup_knopok_16dp"
+        android:text="@string/looking_for"
+        style="@style/TextError"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="@dimen/button_dimen_24dp"
+        android:layout_marginBottom="@dimen/search_radius_padding_8dp"
+        android:visibility="gone"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerSearch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/search_track"/>
+            tools:listitem="@layout/search_track"
+            android:layout_marginBottom="@dimen/button_dimen_24dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/clearHistoryButton"
+            style="@style/UpdateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/clear_search_history"
+            android:paddingHorizontal="@dimen/margin_14dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_button"
+            android:visibility="gone"/>
 
         <ViewStub
             android:id="@+id/nothingFoundViewStub"
@@ -67,5 +92,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout="@layout/no_connection"/>
-    </FrameLayout>
+    </LinearLayout>
 </LinearLayout>
