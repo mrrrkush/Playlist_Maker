@@ -9,8 +9,8 @@ interface iTunesAPI {
     fun search(
         @Query("term") text: String,
         @Query("media") media: String = "music",
-        @Query("entity") entity: String = "song"
-
+        @Query("entity") entity: String = "song",
+        @Query("country") country: String = "RU"
     ): Call<SearchResponse>
 }
 
