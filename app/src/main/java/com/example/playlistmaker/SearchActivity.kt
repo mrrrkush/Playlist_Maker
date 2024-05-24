@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -67,24 +68,24 @@ class SearchActivity : AppCompatActivity() {
         }
         searchEditText.setOnFocusChangeListener { _, hasFocus ->
              if (hasFocus && searchEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
-                 historyText.visibility = View.VISIBLE
-                 recyclerSearch.visibility = View.VISIBLE
+                 historyText.isVisible = true
+                 recyclerSearch.isVisible = true
                  recyclerSearch.adapter = historyAdapter
-                 clearHistoryButton.visibility = View.VISIBLE
+                 clearHistoryButton.isVisible = true
                  updateHistory()
                  clearHistoryButton.setOnClickListener {
                      searchHistory.clearHistory()
                      updateHistory()
-                     historyText.visibility = View.GONE
-                     clearHistoryButton.visibility = View.GONE
-                     recyclerSearch.visibility = View.GONE
+                     historyText.isVisible = false
+                     clearHistoryButton.isVisible = false
+                     recyclerSearch.isVisible = false
                      searchEditText.clearFocus()
                      hideKeyboard(searchEditText)
                      recyclerSearch.adapter = searchAdapter
                  }
              } else {
-                 historyText.visibility = View.GONE
-                 clearHistoryButton.visibility = View.GONE
+                 historyText.isVisible = false
+                 clearHistoryButton.isVisible = false
                  recyclerSearch.adapter = searchAdapter
              }
         }
@@ -106,23 +107,23 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackList.addAll(response.body()?.results!!)
                             searchAdapter.submitList(trackList)
-                            recyclerSearch.visibility = View.VISIBLE
-                            nothingFoundStub?.visibility = View.GONE
+                            recyclerSearch.isVisible = true
+                            nothingFoundStub?.isVisible = false
                         }
                         if (trackList.isEmpty()) {
-                            recyclerSearch.visibility = View.GONE
-                            if (nothingFoundStub?.parent != null) nothingFoundStub.inflate() else nothingFoundStub?.visibility = View.VISIBLE
+                            recyclerSearch.isVisible = false
+                            if (nothingFoundStub?.parent != null) nothingFoundStub.inflate() else nothingFoundStub?.isVisible = true
                             searchEditText.requestFocus()
                         }
                     }
                     override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                        recyclerSearch.visibility = View.GONE
-                        if (noConnectionStub?.parent != null) noConnectionStub.inflate() else noConnectionStub?.visibility = View.VISIBLE
+                        recyclerSearch.isVisible = false
+                        if (noConnectionStub?.parent != null) noConnectionStub.inflate() else noConnectionStub?.isVisible = true
                         val updateButton = findViewById<Button>(R.id.updateButton)
                         updateButton.setOnClickListener {
                             searchTrack()
-                            noConnectionStub?.visibility = View.GONE
-                            recyclerSearch.visibility = View.VISIBLE
+                            noConnectionStub?.isVisible = false
+                            recyclerSearch.isVisible = true
                         }
                     }
                 })
@@ -140,19 +141,19 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+                clearButton.isVisible = if (s.isNullOrEmpty()) false else true
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchAdapter.filter(s.toString())
                     if (searchEditText.hasFocus() && s?.isEmpty() == true && searchHistory.getHistory().isNotEmpty()) {
-                        historyText.visibility = View.VISIBLE
-                        recyclerSearch.visibility = View.VISIBLE
+                        historyText.isVisible = true
+                        recyclerSearch.isVisible = true
                         recyclerSearch.adapter = historyAdapter
-                        clearHistoryButton.visibility = View.VISIBLE
+                        clearHistoryButton.isVisible = true
                     } else {
-                        historyText.visibility = View.GONE
-                        clearHistoryButton.visibility = View.GONE
+                        historyText.isVisible = false
+                        clearHistoryButton.isVisible = false
                         recyclerSearch.adapter = searchAdapter
                     }
             }
@@ -162,12 +163,12 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.clearFocus()
             val hideKeyboard = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             hideKeyboard.hideSoftInputFromWindow(it.windowToken, 0)
-            recyclerSearch.visibility = View.GONE
-            clearHistoryButton.visibility = View.GONE
-            historyText.visibility = View.GONE
+            recyclerSearch.isVisible = false
+            clearHistoryButton.isVisible = false
+            historyText.isVisible = false
             if (nothingFoundStub != null && noConnectionStub != null) {
-                nothingFoundStub.visibility = View.GONE
-                noConnectionStub.visibility = View.GONE
+                nothingFoundStub.isVisible = false
+                noConnectionStub.isVisible = false
             }
         }
     }
