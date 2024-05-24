@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewStub
 import android.view.inputmethod.EditorInfo
@@ -101,6 +102,8 @@ class SearchActivity : AppCompatActivity() {
             if (searchText.isNotEmpty()) {
                 RetrofitInstance.api.search(searchText).enqueue(object : Callback<SearchResponse> {
                     override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+                        Log.d("SearchActivity", "Response code: ${response.code()}")
+                        Log.d("SearchActivity", "Response body: ${response.body()?.results}")
                         if (response.code() == 200) {
                             trackList.clear()
                         }
@@ -121,9 +124,9 @@ class SearchActivity : AppCompatActivity() {
                         if (noConnectionStub?.parent != null) noConnectionStub.inflate() else noConnectionStub?.isVisible = true
                         val updateButton = findViewById<Button>(R.id.updateButton)
                         updateButton.setOnClickListener {
-                            searchTrack()
                             noConnectionStub?.isVisible = false
                             recyclerSearch.isVisible = true
+                            searchTrack()
                         }
                     }
                 })
@@ -188,5 +191,4 @@ class SearchActivity : AppCompatActivity() {
         searchText = savedInstanceState.getString("searchText", searchText)
         findViewById<EditText>(R.id.searchEditText).setText(searchText)
     }
-
 }

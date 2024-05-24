@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/settings_height_61dp"
     android:orientation="horizontal"
-    style="@style/settingsBackground">
+    style="@style/SettingsBackground"
+    android:foreground="?selectableItemBackground">
 
     <ImageView
         android:id="@+id/trackCover"
@@ -22,7 +23,7 @@
            android:layout_weight="1">
             <TextView
                 android:id="@+id/trackTitle"
-                style="@style/trackTextStyle"
+                style="@style/TrackTextStyle"
                 android:layout_marginTop="@dimen/margin_14dp"
                 android:layout_marginHorizontal="@dimen/search_radius_padding_8dp"
                 android:layout_width="wrap_content"
@@ -36,7 +37,7 @@
 
             <TextView
                 android:id="@+id/trackArtist"
-                style="@style/trackTextStyleMini"
+                style="@style/TrackTextStyleMini"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/search_radius_padding_8dp"
@@ -47,7 +48,7 @@
             <TextView
                 android:layout_marginTop="@dimen/margin_1dp"
                 android:id="@+id/trackLength"
-                style="@style/trackTextStyleMini"
+                style="@style/TrackTextStyleMini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/search_radius_padding_8dp"
@@ -59,7 +60,7 @@
         <!--android:textAppearance="?attr/textAppearanceListItem" -->
     <ImageButton
         android:id="@+id/trackButton"
-        style="@style/iconsAgreement"
+        style="@style/IconsAgreement"
         android:layout_height="@dimen/button_dimen_24dp"
         android:layout_width="@dimen/button_dimen_24dp"
         android:layout_marginEnd="@dimen/icons_and_settings_12dp"
