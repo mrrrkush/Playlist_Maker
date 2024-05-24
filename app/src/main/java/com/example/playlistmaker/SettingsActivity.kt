@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -27,14 +26,6 @@ class SettingsActivity : AppCompatActivity() {
         backFromSettings.setOnClickListener {
             val backFromSettingsIntent = Intent(this, MainActivity::class.java)
             startActivity(backFromSettingsIntent)
-        }
-
-        val themeSwitcher = findViewById<Switch>(R.id.themeSwitcher)
-
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
-
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
         }
 
         val shareButton = findViewById<ImageButton>(R.id.shareButton)
