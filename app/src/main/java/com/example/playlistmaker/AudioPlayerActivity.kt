@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -42,6 +43,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         val modifiedArtworkUrl = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
         Glide.with(this)
             .load(modifiedArtworkUrl)
+            .transform(RoundedCorners(8))
             .placeholder(R.drawable.placeholder)
             .into(findViewById(R.id.trackCoverPlayer))
 
