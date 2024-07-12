@@ -5,7 +5,7 @@
     android:id="@+id/nothing_found"
     android:paddingHorizontal="@dimen/button_dimen_24dp"
     android:orientation="vertical"
-    style="@style/settingsBackground">
+    style="@style/SettingsBackground">
 
     <ImageView
         android:layout_width="wrap_content"
