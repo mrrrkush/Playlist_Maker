@@ -10,34 +10,38 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-
-        val backFromSettings = findViewById<ImageView>(R.id.back_from_settings)
+        val backFromSettings = binding.backFromSettings
         backFromSettings.setOnClickListener {
             val backFromSettingsIntent = Intent(this, MainActivity::class.java)
             startActivity(backFromSettingsIntent)
         }
 
-        val themeSwitcher = findViewById<Switch>(R.id.themeSwitcher)
+        val themeSwitcher = binding.themeSwitcher
 
         themeSwitcher.isChecked = (applicationContext as App).darkTheme
 
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 
-        val shareButton = findViewById<ImageButton>(R.id.shareButton)
+        val shareButton = binding.shareButton
         shareButton.setOnClickListener {
             val shareMessage = getString(R.string.share_message)
             val shareButtonIntent = Intent().apply {
@@ -48,7 +52,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent.createChooser(shareButtonIntent, null))
         }
 
-        val supportButton = findViewById<ImageButton>(R.id.supportButton)
+        val supportButton = binding.supportButton
         supportButton.setOnClickListener {
             val recipient = getString(R.string.support_mail_recipent)
             val subject = getString(R.string.support_mail_subject)
@@ -62,7 +66,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(supportButtonIntent)
         }
 
-        val agreementButton = findViewById<ImageButton>(R.id.agreementButton)
+        val agreementButton = binding.agreementButton
         agreementButton.setOnClickListener {
             val agreement = getString(R.string.yp_agreement)
             val agreementButtonIntent =Intent(Intent.ACTION_VIEW)
