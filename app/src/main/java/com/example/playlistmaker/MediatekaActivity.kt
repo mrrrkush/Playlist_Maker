@@ -1,11 +1,11 @@
-package com.example.playlistmaker.presentation.ui.mediateka
+package com.example.playlistmaker
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.databinding.ActivityMediatekaBinding
 
 class MediatekaActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.models
+package com.example.playlistmaker
 
 
 fun getCountry(country: String?): String {

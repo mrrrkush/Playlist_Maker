@@ -1,6 +1,5 @@
-package com.example.playlistmaker.data.network
+package com.example.playlistmaker
 
-import com.example.playlistmaker.data.dto.TrackSearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,6 +11,6 @@ interface iTunesAPI {
         @Query("media") media: String = "music",
         @Query("entity") entity: String = "song"
 
-    ): Call<TrackSearchResponse>
+    ): Call<SearchResponse>
 }
 

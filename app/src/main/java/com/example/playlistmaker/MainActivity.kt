@@ -3,11 +3,10 @@ package com.example.playlistmaker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.view.View
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.presentation.ui.mediateka.MediatekaActivity
-import com.example.playlistmaker.presentation.ui.search.SearchActivity
-import com.example.playlistmaker.presentation.ui.settings.SettingsActivity
+
 
 
 class MainActivity : AppCompatActivity() {

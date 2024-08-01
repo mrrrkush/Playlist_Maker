@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.ui.tracks
+package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Handler
@@ -7,13 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.models.Track
 
 class TrackAdapter(
     private var tracksList: List<Track>,
-    private val searchHistory: SearchHistoryInteractor
+    private val searchHistory: SearchHistory
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var filteredTracksList: List<Track> = tracksList

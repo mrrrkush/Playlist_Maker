@@ -1,29 +1,26 @@
-package com.example.playlistmaker.presentation.ui.settings
+package com.example.playlistmaker
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Switch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.App
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.playlistmaker.domain.api.SettingsInteractor
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var settingsInteractor: SettingsInteractor
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        settingsInteractor = Creator.provideSettingsInteractor(applicationContext as App)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,7 +29,8 @@ class SettingsActivity : AppCompatActivity() {
 
         val backFromSettings = binding.backFromSettings
         backFromSettings.setOnClickListener {
-            finish()
+            val backFromSettingsIntent = Intent(this, MainActivity::class.java)
+            startActivity(backFromSettingsIntent)
         }
 
         val themeSwitcher = binding.themeSwitcher
