@@ -1,6 +1,8 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ class TrackAdapter(
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     private var filteredTracksList: List<Track> = tracksList
+    private val handler = Handler(Looper.getMainLooper())
+    private var clickRunnable: Runnable? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.search_track, parent, false)
@@ -23,6 +27,8 @@ class TrackAdapter(
         Log.d("TrackAdapter", "Track country: ${track.country}")
         holder.bind(track)
         holder.itemView.setOnClickListener {
+            clickRunnable?.let { handler.removeCallbacks(it) }
+            clickRunnable = Runnable {
             Log.d("TrackAdapter", "Clicked on position: $position, Track: ${track.trackName}")
             searchHistory.saveTrack(track)
 
@@ -37,7 +43,10 @@ class TrackAdapter(
                 intent.putExtra("releaseDate", track.releaseDate)
                 intent.putExtra("primaryGenreName", track.primaryGenreName)
                 intent.putExtra("country", track.country)
+                intent.putExtra("previewUrl", track.previewUrl)
                 context.startActivity(intent)
+        }
+            handler.postDelayed(clickRunnable!!, 300)
         }
     }
 
