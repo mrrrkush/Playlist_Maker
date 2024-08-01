@@ -1,10 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.models
 
 data class Track(
     val trackId: Int,
     val trackName: String,
     val artistName: String,
-    val trackTimeMillis: Long,
+    val trackTimeMillis: String,
     val artworkUrl100: String,
     val collectionName: String,
     val releaseDate: String,
@@ -12,5 +12,5 @@ data class Track(
     val country: String,
     val previewUrl: String
 )
-data class SearchResponse(val resultCount: Int, val results: List<Track>)
+
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main"
-    tools:context=".AudioPlayerActivity"
+    tools:context=".presentation.ui.tracks.AudioPlayerActivity"
     style="@style/SettingsBackground">
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -132,7 +132,7 @@
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         android:layout_marginTop="4dp"
-        android:text="@string/defaultSongTime" />
+        android:text="@string/default_song_time" />
 
     <TextView
         android:id="@+id/songTimeTv"

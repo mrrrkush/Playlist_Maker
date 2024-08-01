@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.tracks
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -11,12 +11,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
+import com.example.playlistmaker.domain.models.getCountry
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
     companion object {
+        private const val delayMillis = 300L
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
@@ -68,7 +71,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
             binding.playButton.isVisible = true
             binding.pauseButton.isVisible = false
-            binding.timeOfSongPlay.text = getResources().getString(R.string.defaultSongTime)
+            binding.timeOfSongPlay.text = getResources().getString(R.string.default_song_time)
             handler.removeCallbacks(updateProgressRunnable)
         }
     }
@@ -184,7 +187,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                 if (playerState == STATE_PLAYING) {
                     val currentPosition = mediaPlayer.currentPosition
                     binding.timeOfSongPlay.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
-                    handler.postDelayed(this, 300)
+                    handler.postDelayed(this, delayMillis)
                 }
             }
         }

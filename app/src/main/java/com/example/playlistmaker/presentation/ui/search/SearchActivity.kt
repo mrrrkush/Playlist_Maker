@@ -1,13 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -18,10 +16,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.api.TrackInteractor
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.ui.tracks.TrackAdapter
 
 
 class SearchActivity : AppCompatActivity() {
@@ -30,7 +31,8 @@ class SearchActivity : AppCompatActivity() {
     private val trackList = mutableListOf<Track>()
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var trackInteractor: TrackInteractor
+    private lateinit var searchHistoryInteractor: SearchHistoryInteractor
 
     private val handler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
@@ -41,10 +43,14 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupWindowInsets()
+
+        trackInteractor = Creator.provideTrackInteractor()
+        val sharedPref = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        searchHistoryInteractor = Creator.provideSearchHistoryInteractor(sharedPref)
+
         setupView()
         setupAdapters()
         setupSearchEditText()
-
         savedInstanceState?.let {
             searchText = it.getString("searchText", "")
             binding.searchEditText.setText(searchText)
@@ -61,14 +67,13 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupView() {
         binding.backFromSearch.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
     private fun setupAdapters() {
-        searchHistory = SearchHistory(getSharedPreferences("app_prefs", MODE_PRIVATE))
-        searchAdapter = TrackAdapter(trackList, searchHistory)
-        historyAdapter = TrackAdapter(searchHistory.getHistory(), searchHistory)
+        searchAdapter = TrackAdapter(trackList, searchHistoryInteractor)
+        historyAdapter = TrackAdapter(searchHistoryInteractor.getHistory(), searchHistoryInteractor)
 
         binding.recyclerSearch.apply {
             adapter = searchAdapter
@@ -113,7 +118,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun handleSearchFocus(hasFocus: Boolean) {
         with(binding) {
-            if (hasFocus && searchEditText.text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
+            if (hasFocus && searchEditText.text.isEmpty() && searchHistoryInteractor.getHistory().isNotEmpty()) {
                 showSearchHistory()
             } else {
                 hideSearchHistory()
@@ -124,7 +129,7 @@ class SearchActivity : AppCompatActivity() {
     private fun handleTextChange(text: String) {
         searchAdapter.filter(text)
         with(binding) {
-            if (searchEditText.hasFocus() && text.isEmpty() && searchHistory.getHistory().isNotEmpty()) {
+            if (searchEditText.hasFocus() && text.isEmpty() && searchHistoryInteractor.getHistory().isNotEmpty()) {
                 showSearchHistory()
             } else {
                 hideSearchHistory()
@@ -140,7 +145,7 @@ class SearchActivity : AppCompatActivity() {
             clearHistoryButton.isVisible = true
             updateHistory()
             clearHistoryButton.setOnClickListener {
-                searchHistory.clearHistory()
+                searchHistoryInteractor.clearHistory()
                 updateHistory()
                 hideSearchHistory()
                 searchEditText.clearFocus()
@@ -159,50 +164,31 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun updateHistory() {
-        historyAdapter.submitList(searchHistory.getHistory())
+        historyAdapter.submitList(searchHistoryInteractor.getHistory())
     }
 
     private fun searchTrack() {
         val searchText = binding.searchEditText.text.toString()
         if (searchText.isNotEmpty()) {
             binding.progressBar.isVisible = true
-            RetrofitInstance.api.search(searchText).enqueue(object : Callback<SearchResponse> {
-                override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
-                    handleSearchResponse(response)
-                    binding.progressBar.isVisible = false
-                }
-
-                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                    handleSearchFailure()
-                    binding.progressBar.isVisible = false
+            trackInteractor.searchTrack(searchText, object : TrackInteractor.TrackConsumer {
+                override fun consume(foundTrack: List<Track>) {
+                    runOnUiThread {
+                        handleSearchResponse(foundTrack)
+                        binding.progressBar.isVisible = false
+                    }
                 }
             })
         }
     }
 
-    private fun handleSearchResponse(response: Response<SearchResponse>) {
+    private fun handleSearchResponse(foundTracks: List<Track>) {
         with(binding) {
-            Log.d("SearchActivity", "Response code: ${response.code()}")
-            Log.d("SearchActivity", "Response body: ${response.body()?.results}")
-
-            if (response.code() == 200) {
-                trackList.clear()
-            }
-
-            if (response.body()?.results?.isNotEmpty() == true) {
-                trackList.addAll(response.body()?.results!!)
-                searchAdapter.submitList(trackList)
-                recyclerSearch.isVisible = true
-                nothingFoundViewStub.isVisible = false
-            } else {
-                recyclerSearch.isVisible = false
-                if (nothingFoundViewStub.parent != null) {
-                    nothingFoundViewStub.inflate()
-                } else {
-                    nothingFoundViewStub.isVisible = true
-                }
-                binding.searchEditText.requestFocus()
-            }
+            trackList.clear()
+            trackList.addAll(foundTracks)
+            searchAdapter.submitList(trackList)
+            recyclerSearch.isVisible = trackList.isNotEmpty()
+            nothingFoundViewStub.isVisible = trackList.isEmpty()
         }
     }
 
