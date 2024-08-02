@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     style="@style/SettingsBackground"
     android:orientation="vertical"
-    tools:context=".SettingsActivity">
+    tools:context=".presentation.ui.settings.SettingsActivity">
 
 <LinearLayout
     android:layout_width="match_parent"

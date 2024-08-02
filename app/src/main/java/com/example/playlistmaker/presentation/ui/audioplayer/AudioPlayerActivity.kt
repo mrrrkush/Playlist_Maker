@@ -1,6 +1,5 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.audioplayer
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,12 +10,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.audioplayer.AudioPlayerRepositoryImpl
 import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
+import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
+import com.example.playlistmaker.domain.impl.audioplayer.AudioPlayerInteractorImpl
+import com.example.playlistmaker.domain.models.getCountry
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
     companion object {
+        private const val DELAY_MILLIS = 300L
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
@@ -25,10 +30,10 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private var playerState = STATE_DEFAULT
     private lateinit var binding: ActivityAudioplayerBinding
-    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var handler: Handler
     private lateinit var updateProgressRunnable: Runnable
     private var previewUrl: String? = null
+    private lateinit var audioPlayerInteractor: AudioPlayerInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +46,10 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
             return
         }
+        audioPlayerInteractor = AudioPlayerInteractorImpl(AudioPlayerRepositoryImpl())
 
         setupWindowInsets()
         setupTrackInfo()
-        setupMediaPlayer()
         setupPlaybackControls()
         preparePlayer()
     }
@@ -54,22 +59,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-    }
-
-    private fun setupMediaPlayer() {
-        mediaPlayer = MediaPlayer()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-            binding.playButton.isVisible = true
-            binding.pauseButton.isVisible = false
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            binding.playButton.isVisible = true
-            binding.pauseButton.isVisible = false
-            binding.timeOfSongPlay.text = getResources().getString(R.string.defaultSongTime)
-            handler.removeCallbacks(updateProgressRunnable)
         }
     }
 
@@ -140,10 +129,22 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.reset()
+        audioPlayerInteractor.setOnPreparedListener {
+            playerState = STATE_PREPARED
+            binding.playButton.isVisible = true
+            binding.pauseButton.isVisible = false
+        }
+
+        audioPlayerInteractor.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            binding.playButton.isVisible = true
+            binding.pauseButton.isVisible = false
+            binding.timeOfSongPlay.text = getString(R.string.default_song_time)
+            handler.removeCallbacks(updateProgressRunnable)
+        }
+
         previewUrl?.let {
-            mediaPlayer.setDataSource(it)
-            mediaPlayer.prepareAsync()
+            audioPlayerInteractor.prepare(it)
         }
     }
 
@@ -156,7 +157,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
         if (playerState == STATE_PREPARED || playerState == STATE_PAUSED) {
-            mediaPlayer.start()
+            audioPlayerInteractor.play()
             playerState = STATE_PLAYING
 
             binding.playButton.isVisible = false
@@ -167,8 +168,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
+        if (audioPlayerInteractor.isPlaying()) {
+            audioPlayerInteractor.pause()
             playerState = STATE_PAUSED
 
             binding.playButton.isVisible = true
@@ -182,9 +183,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         updateProgressRunnable = object : Runnable {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
-                    val currentPosition = mediaPlayer.currentPosition
+                    val currentPosition = audioPlayerInteractor.getCurrentPosition()
                     binding.timeOfSongPlay.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
-                    handler.postDelayed(this, 300)
+                    handler.postDelayed(this, DELAY_MILLIS)
                 }
             }
         }
@@ -193,7 +194,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (mediaPlayer.isPlaying) {
+        if (audioPlayerInteractor.isPlaying()) {
             pausePlayer()
         }
     }
@@ -203,7 +204,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (::updateProgressRunnable.isInitialized) {
             handler.removeCallbacks(updateProgressRunnable)
         }
-        mediaPlayer.release()
+        audioPlayerInteractor.release()
     }
 }
 
