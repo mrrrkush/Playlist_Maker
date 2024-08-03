@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.searchHistory
 
 import android.content.SharedPreferences
 import com.example.playlistmaker.domain.api.searchHistory.SearchHistoryRepository
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.model.track.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
