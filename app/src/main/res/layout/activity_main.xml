@@ -7,7 +7,7 @@
         style="@style/Theme.PlaylistMaker"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/otstup_knopok_16dp"
-        tools:context=".MainActivity">
+        tools:context=".ui.main.MainActivity">
 
         <FrameLayout
             android:layout_width="match_parent"

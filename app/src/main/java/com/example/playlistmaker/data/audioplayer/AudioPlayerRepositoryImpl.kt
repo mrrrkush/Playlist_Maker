@@ -2,47 +2,62 @@ package com.example.playlistmaker.data.audioplayer
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
+import java.io.IOException
 
 class AudioPlayerRepositoryImpl : AudioPlayerRepository {
-    private val mediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer? = MediaPlayer()
+
+    private fun getMediaPlayer(): MediaPlayer {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer()
+        }
+        return mediaPlayer!!
+    }
 
     override fun setDataSource(url: String) {
-        mediaPlayer.setDataSource(url)
+        val mp = getMediaPlayer()
+        try {
+            mp.reset()
+            mp.setDataSource(url)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     override fun prepare() {
-        mediaPlayer.prepareAsync()
+        getMediaPlayer().prepareAsync()
     }
 
     override fun start() {
-        mediaPlayer.start()
+        getMediaPlayer().start()
     }
 
     override fun pause() {
-        mediaPlayer.pause()
+        getMediaPlayer().pause()
     }
 
     override fun stop() {
-        mediaPlayer.stop()
+        getMediaPlayer().stop()
     }
 
     override fun release() {
-        mediaPlayer.release()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     override fun isPlaying(): Boolean {
-        return mediaPlayer.isPlaying
+        return getMediaPlayer().isPlaying
     }
 
     override fun getCurrentPosition(): Int {
-        return mediaPlayer.currentPosition
+        return getMediaPlayer().currentPosition
     }
 
     override fun setOnPreparedListener(listener: () -> Unit) {
-        mediaPlayer.setOnPreparedListener { listener() }
+        getMediaPlayer().setOnPreparedListener { listener() }
     }
 
     override fun setOnCompletionListener(listener: () -> Unit) {
-        mediaPlayer.setOnCompletionListener { listener() }
+        getMediaPlayer().setOnCompletionListener { listener() }
     }
 }

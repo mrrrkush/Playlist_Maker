@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.api.settings
 
 interface SettingsInteractor {
-    var isDarkTheme: Boolean
+    val isDarkTheme: Boolean
     fun switchTheme(isDark: Boolean)
 }
