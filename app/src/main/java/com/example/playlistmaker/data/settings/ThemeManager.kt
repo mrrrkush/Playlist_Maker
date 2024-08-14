@@ -5,15 +5,19 @@ import androidx.appcompat.app.AppCompatDelegate
 
 class ThemeManager(private val sharedPreferences: SharedPreferences) {
 
+    companion object {
+        private const val DARK_THEME_KEY = "darkTheme"
+    }
+
     fun switchTheme(darkThemeEnabled: Boolean) {
         sharedPreferences.edit()
-            .putBoolean("darkTheme", darkThemeEnabled)
+            .putBoolean(DARK_THEME_KEY, darkThemeEnabled)
             .apply()
         updateTheme()
     }
 
     private fun updateTheme() {
-        val darkTheme = sharedPreferences.getBoolean("darkTheme", false)
+        val darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
         AppCompatDelegate.setDefaultNightMode(
             if (darkTheme) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -24,6 +28,7 @@ class ThemeManager(private val sharedPreferences: SharedPreferences) {
     }
 
     fun isDarkTheme(): Boolean {
-        return sharedPreferences.getBoolean("darkTheme", false)
+        return sharedPreferences.getBoolean(DARK_THEME_KEY, false)
     }
 }
+
