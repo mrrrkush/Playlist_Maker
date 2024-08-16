@@ -6,22 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.app.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.example.playlistmaker.domain.model.track.getCountry
 import com.example.playlistmaker.ui.audioplayer.view_model.AudioPlayerViewModel
-import com.example.playlistmaker.ui.audioplayer.view_model.AudioPlayerViewModelFactory
 import com.example.playlistmaker.ui.audioplayer.view_model.PlayerState
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAudioplayerBinding
-    private lateinit var viewModel: AudioPlayerViewModel
+
+    private val viewModel: AudioPlayerViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +32,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
             return
         }
-
-        viewModel = ViewModelProvider(this, AudioPlayerViewModelFactory((application as App).provideAudioPlayerInteractor())).get(AudioPlayerViewModel::class.java)
 
         setupWindowInsets()
         setupTrackInfo()

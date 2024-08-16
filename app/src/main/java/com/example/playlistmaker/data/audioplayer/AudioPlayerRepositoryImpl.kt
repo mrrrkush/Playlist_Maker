@@ -4,21 +4,25 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
 import java.io.IOException
 
-class AudioPlayerRepositoryImpl : AudioPlayerRepository {
-    private var mediaPlayer: MediaPlayer? = MediaPlayer()
+class AudioPlayerRepositoryImpl(
+    private var mediaPlayer: MediaPlayer
+) : AudioPlayerRepository {
+
+    private var isMediaPlayerInitialized: Boolean = false
 
     private fun getMediaPlayer(): MediaPlayer {
-        if (mediaPlayer == null) {
+        if (!isMediaPlayerInitialized) {
+            isMediaPlayerInitialized = true
             mediaPlayer = MediaPlayer()
         }
-        return mediaPlayer!!
+        return mediaPlayer
     }
 
     override fun setDataSource(url: String) {
-        val mp = getMediaPlayer()
+        val player = getMediaPlayer()
         try {
-            mp.reset()
-            mp.setDataSource(url)
+            player.reset()
+            player.setDataSource(url)
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -41,16 +45,26 @@ class AudioPlayerRepositoryImpl : AudioPlayerRepository {
     }
 
     override fun release() {
-        mediaPlayer?.release()
-        mediaPlayer = null
+        if (isMediaPlayerInitialized) {
+            mediaPlayer.release()
+            isMediaPlayerInitialized = false
+        }
     }
 
     override fun isPlaying(): Boolean {
-        return getMediaPlayer().isPlaying
+        return if (isMediaPlayerInitialized) {
+            getMediaPlayer().isPlaying
+        } else {
+            false
+        }
     }
 
     override fun getCurrentPosition(): Int {
-        return getMediaPlayer().currentPosition
+        return if (isMediaPlayerInitialized) {
+            getMediaPlayer().currentPosition
+        } else {
+            0
+        }
     }
 
     override fun setOnPreparedListener(listener: () -> Unit) {

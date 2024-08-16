@@ -8,24 +8,22 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.app.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.model.track.Track
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import com.example.playlistmaker.ui.search.view_model.SearchViewModelFactory
 import com.example.playlistmaker.ui.track.TrackAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -34,12 +32,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyAdapter: TrackAdapter
     private var searchJob: Job? = null
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(
-            (application as App).provideTrackInteractor(),
-            (application as App).provideSearchHistoryInteractor()
-        )
-    }
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
