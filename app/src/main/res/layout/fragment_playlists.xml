@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/SettingsBackground">
+
+    <Button
+        android:id="@+id/newPlaylist"
+        style="@style/NewPlaylistButton"
+        android:layout_height="36dp"
+        android:layout_width="133dp"
+        android:layout_marginTop="@dimen/button_dimen_24dp"
+        android:text="@string/new_playlist"
+        android:background="@drawable/rounded_button"/>
+
+    <TextView
+        android:id="@+id/nothingFound"
+        style="@style/NothingFoundMediateka"
+        android:layout_marginTop="@dimen/layout_marginTop_120dp"
+        android:text="@string/you_have_no_playlist"
+        android:visibility="visible" />
+</FrameLayout>

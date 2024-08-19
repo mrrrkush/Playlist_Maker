@@ -3,12 +3,11 @@
     <dimen name="otstup_knopok_16dp">16dp</dimen>
     <dimen name="icons_and_settings_12dp">12dp</dimen>
     <dimen name="text_main_22sp">22sp</dimen>
-    <dimen name="text_settings_16sp">16sp</dimen>
+    <dimen name="text_16sp">16sp</dimen>
     <dimen name="settings_height_61dp">61dp</dimen>
     <dimen name="search_radius_padding_8dp">8dp</dimen>
     <dimen name="search_height_56dp">56dp</dimen>
     <dimen name="image_size_45dp">45dp</dimen>
-    <dimen name="song_name_16sp">16sp</dimen>
     <dimen name="artist_name_11sp">11sp</dimen>
     <dimen name="button_dimen_24dp">24dp</dimen>
     <dimen name="margin_13dp">13dp</dimen>
@@ -21,4 +20,6 @@
     <dimen name="margin_9dp">9dp</dimen>
     <dimen name="text_13sp">13sp</dimen>
     <dimen name="margin_39dp">39dp</dimen>
+    <dimen name="layout_marginTop_120dp">120dp</dimen>
+    <dimen name="margin_80dp">80dp</dimen>
 </resources>
