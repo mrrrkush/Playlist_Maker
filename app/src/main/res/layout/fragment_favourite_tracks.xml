@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/SettingsBackground">
+
+    <TextView
+        android:id="@+id/nothingFound"
+        style="@style/NothingFoundMediateka"
+        android:layout_marginTop="@dimen/layout_marginTop_120dp"
+        android:text="@string/your_media_isEmpty"
+        android:visibility="visible" />
+</FrameLayout>
