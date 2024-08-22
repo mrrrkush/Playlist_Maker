@@ -33,7 +33,6 @@
 
     </style>
 
-
     <style name="FontStyle" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/text_16sp</item>
