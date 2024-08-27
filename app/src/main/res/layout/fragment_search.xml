@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     style="@style/SettingsBackground"
     android:orientation="vertical"
-    tools:context=".ui.search.activity.SearchActivity">
+    tools:context=".ui.search.activity.SearchFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +16,7 @@
             android:id="@+id/back_from_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            style="@style/IconsBackArrow" />
+            android:layout_gravity="center_vertical"/>
 
         <TextView
             style="@style/SettingsName"
