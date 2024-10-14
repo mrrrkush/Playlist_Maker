@@ -5,15 +5,17 @@ import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.dto.TrackSearchResponse
 import com.example.playlistmaker.domain.api.search.TrackRepository
 import com.example.playlistmaker.domain.model.track.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
 
-    override fun searchTrack(expression: String): List<Track> {
+    override fun searchTrack(expression: String): Flow<List<Track>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         if (response.resultCode == 200) {
-            return (response as TrackSearchResponse).results.map {
+            emit((response as TrackSearchResponse).results.map {
                 Track(
                     it.trackId,
                     it.trackName,
@@ -26,14 +28,14 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                     it.country,
                     it.previewUrl
                 )
-            }
+            })
         } else {
-            return emptyList()
+            emit(emptyList())
         }
     }
 
     private fun formatTrackTime(trackTimeMillis: Long): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
     }
-    }
+}
 

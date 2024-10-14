@@ -4,26 +4,19 @@ import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.dto.TrackSearchResponse
-import retrofit2.Call
-import retrofit2.Response as RetrofitResponse
 
 class RetrofitNetworkClient(private val apiService: ITunesAPI) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         return if (dto is TrackSearchRequest) {
             try {
-                val call: Call<TrackSearchResponse> = apiService.search(dto.expression)
-                val response: RetrofitResponse<TrackSearchResponse> = call.execute()
-                val body = response.body()
-
-                val result = TrackSearchResponse(
-                    resultCount = body?.resultCount ?: 0,
-                    results = body?.results ?: emptyList()
+                val response: TrackSearchResponse = apiService.search(dto.expression)
+                TrackSearchResponse(
+                    resultCount = response.resultCount,
+                    results = response.results
                 ).apply {
-                    resultCode = response.code()
+                    resultCode = 200
                 }
-
-                result
             } catch (e: Exception) {
                 Response().apply { resultCode = 500 }
             }
