@@ -13,7 +13,7 @@ import com.example.playlistmaker.data.searchHistory.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.searchHistory.SearchHistoryStorage
 import com.example.playlistmaker.data.searchHistory.SharedPrefsHistoryStorage
 import com.example.playlistmaker.data.settings.ThemeManager
-import com.example.playlistmaker.db.TrackDbConverter
+import com.example.playlistmaker.data.db.TrackDbConverter
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
 import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
 import com.example.playlistmaker.domain.api.search.SearchRepository

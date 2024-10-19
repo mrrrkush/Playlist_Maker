@@ -1,8 +1,8 @@
 package com.example.playlistmaker.data.mediateka
 
-import com.example.playlistmaker.db.AppDatabase
-import com.example.playlistmaker.db.TrackDbConverter
-import com.example.playlistmaker.db.TrackEntity
+import com.example.playlistmaker.data.db.AppDatabase
+import com.example.playlistmaker.data.db.TrackDbConverter
+import com.example.playlistmaker.data.db.TrackEntity
 import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow

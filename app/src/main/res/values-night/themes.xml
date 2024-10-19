@@ -222,6 +222,6 @@
         <item name="itemIconTint">@drawable/menu_color</item>
         <item name="itemTextColor">@drawable/menu_color</item>
         <item name="menu">@menu/bottom_navigation_menu</item>
+        <item name="elevationOverlayColor">@color/grey_search</item>
     </style>
-
 </resources>

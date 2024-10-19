@@ -125,18 +125,25 @@ class SearchFragment : Fragment() {
     }
 
     private fun handleHistoryVisibility(text: CharSequence?) {
-        val isTextEmpty = text.isNullOrEmpty()
-        searchBinding.searchHistoryLayout.isVisible = isTextEmpty
-        searchBinding.historyText.isVisible = isTextEmpty
-        searchBinding.clearHistoryButton.isVisible = isTextEmpty
+        if (text.isNullOrEmpty()) {
+            searchBinding.searchHistoryLayout.isVisible = true
+            searchBinding.historyText.isVisible = true
+            searchBinding.clearHistoryButton.isVisible = true
+            searchBinding.recyclerSearch.isVisible = false
+        } else {
+            searchBinding.searchHistoryLayout.isVisible = false
+            searchBinding.historyText.isVisible = false
+            searchBinding.clearHistoryButton.isVisible = false
+            searchBinding.recyclerSearch.isVisible = true
+        }
     }
-
     private fun showHistoryList(tracks: List<Track>) {
         clearContent()
         historyAdapter.tracks.addAll(tracks)
-        val isHistoryNotEmpty = tracks.isNotEmpty()
-        searchBinding.searchHistoryLayout.isVisible = isHistoryNotEmpty
-        searchBinding.clearHistoryButton.isVisible = isHistoryNotEmpty
+        if (tracks.isNotEmpty()) {
+            searchBinding.searchHistoryLayout.isVisible = true
+            searchBinding.clearHistoryButton.isVisible = true
+        }
     }
 
     private fun showLoading() {
