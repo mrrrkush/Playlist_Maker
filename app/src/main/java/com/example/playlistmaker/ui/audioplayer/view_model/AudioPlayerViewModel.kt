@@ -3,8 +3,8 @@ package com.example.playlistmaker.ui.audioplayer.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -30,6 +30,7 @@ class AudioPlayerViewModel(
         audioPlayerInteractor.setOnCompletionListener {
             _playerState.postValue(PlayerState.PREPARED)
             updateProgressJob?.cancel()
+            resetProgress()
         }
     }
 
@@ -57,6 +58,7 @@ class AudioPlayerViewModel(
         audioPlayerInteractor.stop()
         _playerState.postValue(PlayerState.PREPARED)
         updateProgressJob?.cancel()
+        resetProgress()
     }
 
     fun release() {
@@ -66,12 +68,16 @@ class AudioPlayerViewModel(
 
     private fun startProgressUpdater() {
         updateProgressJob?.cancel()
-        updateProgressJob = CoroutineScope(Dispatchers.Main).launch {
+        updateProgressJob = viewModelScope.launch(Dispatchers.Main) {
             while (playerState.value == PlayerState.PLAYING) {
                 _currentPosition.postValue(audioPlayerInteractor.getCurrentPosition())
                 delay(300L)
             }
         }
+    }
+
+    private fun resetProgress() {
+        _currentPosition.postValue(0)
     }
 }
 
