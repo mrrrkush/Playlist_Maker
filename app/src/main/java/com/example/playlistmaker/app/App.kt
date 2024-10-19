@@ -3,6 +3,7 @@ package com.example.playlistmaker.app
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.dbModule
 import com.example.playlistmaker.di.domainModule
 import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.api.settings.SettingsInteractor
@@ -17,7 +18,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(dataModule, domainModule, viewModelModule)
+            modules(dataModule, domainModule, viewModelModule, dbModule)
         }
         val settingsInteractor: SettingsInteractor = getKoin().get()
         AppCompatDelegate.setDefaultNightMode(

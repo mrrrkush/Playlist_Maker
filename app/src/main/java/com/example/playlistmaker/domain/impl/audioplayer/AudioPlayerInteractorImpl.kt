@@ -2,44 +2,28 @@ package com.example.playlistmaker.domain.impl.audioplayer
 
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
+import com.example.playlistmaker.ui.audioplayer.models.PlayerState
 
-class AudioPlayerInteractorImpl(private val audioPlayer: AudioPlayerRepository) :
-    AudioPlayerInteractor {
-
-    override fun prepare(url: String) {
-        audioPlayer.setDataSource(url)
-        audioPlayer.prepare()
+class AudioPlayerInteractorImpl(private val repository: AudioPlayerRepository): AudioPlayerInteractor {
+    override fun preparePlayer(url: String) {
+        repository.preparePlayer(url)
     }
 
-    override fun play() {
-        audioPlayer.start()
+    override fun startPlayer() {
+        repository.startPlayer()
     }
 
-    override fun pause() {
-        audioPlayer.pause()
+    override fun pausePlayer() {
+        repository.pausePlayer()
     }
 
-    override fun stop() {
-        audioPlayer.stop()
+    override fun reset() {
+        repository.reset()
     }
 
-    override fun release() {
-        audioPlayer.release()
-    }
+    override fun getPosition(): Long = repository.getPosition()
 
-    override fun isPlaying(): Boolean {
-        return audioPlayer.isPlaying()
-    }
-
-    override fun getCurrentPosition(): Int {
-        return audioPlayer.getCurrentPosition()
-    }
-
-    override fun setOnPreparedListener(listener: () -> Unit) {
-        audioPlayer.setOnPreparedListener(listener)
-    }
-
-    override fun setOnCompletionListener(listener: () -> Unit) {
-        audioPlayer.setOnCompletionListener(listener)
+    override fun setOnStateChangeListener(callback: (PlayerState) -> Unit) {
+        repository.setOnStateChangeListener(callback)
     }
 }

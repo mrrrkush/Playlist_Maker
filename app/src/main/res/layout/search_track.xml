@@ -57,7 +57,7 @@
         </LinearLayout>
 
         </LinearLayout>
-        <!--android:textAppearance="?attr/textAppearanceListItem" -->
+
     <ImageButton
         android:id="@+id/trackButton"
         style="@style/IconsAgreement"

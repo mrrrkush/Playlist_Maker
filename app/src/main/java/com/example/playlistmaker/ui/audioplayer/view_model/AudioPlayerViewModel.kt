@@ -5,85 +5,95 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
+import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksInteractor
+import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.ui.audioplayer.models.PlayerState
+import com.example.playlistmaker.util.formatAsTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
-    private val audioPlayerInteractor: AudioPlayerInteractor
+    private val playerInteractor: AudioPlayerInteractor,
+    private val favouriteTracksInteractor: FavouriteTracksInteractor
 ) : ViewModel() {
 
-    private val _playerState = MutableLiveData(PlayerState.DEFAULT)
-    val playerState: LiveData<PlayerState> = _playerState
+    private var timerJob: Job? = null
+    private var isFavourite = false
 
-    private val _currentPosition = MutableLiveData(0)
-    val currentPosition: LiveData<Int> = _currentPosition
+    private val stateLiveData = MutableLiveData<PlayerState>()
+    fun observeState(): LiveData<PlayerState> = stateLiveData
 
-    private var updateProgressJob: Job? = null
+    private val timeLiveData = MutableLiveData<String>()
+    fun observeTime(): LiveData<String> = timeLiveData
+
+    private val isFavouriteLiveData = MutableLiveData<Boolean>()
+    fun observeIsFavourite(): LiveData<Boolean> = isFavouriteLiveData
 
     init {
-        audioPlayerInteractor.setOnPreparedListener {
-            _playerState.postValue(PlayerState.PREPARED)
-        }
-
-        audioPlayerInteractor.setOnCompletionListener {
-            _playerState.postValue(PlayerState.PREPARED)
-            updateProgressJob?.cancel()
-            resetProgress()
+        playerInteractor.setOnStateChangeListener { state ->
+            stateLiveData.postValue(state)
+            if (state == PlayerState.STATE_COMPLETE) timerJob?.cancel()
         }
     }
 
-    fun prepare(url: String) {
-        audioPlayerInteractor.prepare(url)
-    }
-
-    fun play() {
-        if (playerState.value == PlayerState.PREPARED || playerState.value == PlayerState.PAUSED) {
-            audioPlayerInteractor.play()
-            _playerState.postValue(PlayerState.PLAYING)
-            startProgressUpdater()
-        }
-    }
-
-    fun pause() {
-        if (audioPlayerInteractor.isPlaying()) {
-            audioPlayerInteractor.pause()
-            _playerState.postValue(PlayerState.PAUSED)
-            updateProgressJob?.cancel()
-        }
-    }
-
-    fun stop() {
-        audioPlayerInteractor.stop()
-        _playerState.postValue(PlayerState.PREPARED)
-        updateProgressJob?.cancel()
-        resetProgress()
-    }
-
-    fun release() {
-        audioPlayerInteractor.release()
-        updateProgressJob?.cancel()
-    }
-
-    private fun startProgressUpdater() {
-        updateProgressJob?.cancel()
-        updateProgressJob = viewModelScope.launch(Dispatchers.Main) {
-            while (playerState.value == PlayerState.PLAYING) {
-                _currentPosition.postValue(audioPlayerInteractor.getCurrentPosition())
-                delay(300L)
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (isActive) {
+                delay(DELAY_TIME_MILLIS)
+                timeLiveData.postValue(playerInteractor.getPosition().formatAsTime())
             }
         }
     }
 
-    private fun resetProgress() {
-        _currentPosition.postValue(0)
+    fun prepare(url: String) {
+        timerJob?.cancel()
+        playerInteractor.preparePlayer(url)
     }
-}
 
-enum class PlayerState {
-    DEFAULT,
-    PREPARED,
-    PLAYING,
-    PAUSED
+    fun play() {
+        playerInteractor.startPlayer()
+        startTimer()
+    }
+
+    fun pause() {
+        playerInteractor.pausePlayer()
+        timerJob?.cancel()
+    }
+
+    fun reset() {
+        playerInteractor.reset()
+        timerJob?.cancel()
+    }
+
+    fun checkIsFavourite(trackId: Int) {
+        viewModelScope.launch {
+            favouriteTracksInteractor
+                .isFavoriteTrack(trackId)
+                .collect { isFavorite ->
+                    isFavourite = isFavorite
+                    isFavouriteLiveData.postValue(isFavourite)
+                }
+        }
+    }
+
+    fun onFavouriteClicked(track: Track) {
+        viewModelScope.launch {
+            isFavourite = if (isFavourite) {
+                favouriteTracksInteractor.deleteFromFavorites(track.trackId)
+                isFavouriteLiveData.postValue(false)
+                false
+            } else {
+                favouriteTracksInteractor.addToFavorites(track)
+                isFavouriteLiveData.postValue(true)
+                true
+            }
+        }
+    }
+
+    companion object {
+        const val DELAY_TIME_MILLIS = 300L
+    }
 }

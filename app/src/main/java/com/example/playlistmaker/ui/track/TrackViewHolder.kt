@@ -1,8 +1,6 @@
 package com.example.playlistmaker.ui.track
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,29 +8,28 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.model.track.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val trackName: TextView = itemView.findViewById(R.id.trackTitle)
-    private val artistName: TextView = itemView.findViewById(R.id.trackArtist)
-    private val trackTime: TextView = itemView.findViewById(R.id.trackLength)
-    private val artwork: ImageView = itemView.findViewById(R.id.trackCover)
 
-    fun bind(track: Track) {
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        trackTime.text = track.trackTimeMillis
-        Glide.with(itemView)
-            .load(track.artworkUrl100)
-            .centerCrop()
-            .transform(RoundedCorners(2))
+    private val artistName = itemView.findViewById<TextView>(R.id.trackArtist)
+    private val trackName = itemView.findViewById<TextView>(R.id.trackTitle)
+    private val trackTime = itemView.findViewById<TextView>(R.id.trackLength)
+    private val trackImage = itemView.findViewById<ImageView>(R.id.trackCover)
+
+    fun bind(model: Track) {
+        artistName.text = model.artistName
+        trackName.text = model.trackName
+        trackTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+
+        Glide.with(itemView.context)
+            .load(model.artworkUrl100)
             .placeholder(R.drawable.placeholder)
-            .into(artwork)
+            .centerCrop()
+            .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.radius_2dp)))
+            .into(trackImage)
     }
-    companion object {
-        fun create(parent: ViewGroup): TrackViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.search_track, parent, false)
-            return TrackViewHolder(view)
-        }
-    }
+
 }

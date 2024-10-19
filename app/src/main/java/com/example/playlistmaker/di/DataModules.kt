@@ -5,13 +5,18 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.audioplayer.AudioPlayerRepositoryImpl
+import com.example.playlistmaker.data.mediateka.FavouriteTracksRepositoryImpl
 import com.example.playlistmaker.data.network.ITunesAPI
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.search.TrackRepositoryImpl
+import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.searchHistory.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.data.searchHistory.SearchHistoryStorage
+import com.example.playlistmaker.data.searchHistory.SharedPrefsHistoryStorage
 import com.example.playlistmaker.data.settings.ThemeManager
+import com.example.playlistmaker.db.TrackDbConverter
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
-import com.example.playlistmaker.domain.api.search.TrackRepository
+import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
+import com.example.playlistmaker.domain.api.search.SearchRepository
 import com.example.playlistmaker.domain.api.searchHistory.SearchHistoryRepository
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
@@ -38,8 +43,14 @@ val dataModule = module {
 
     single<NetworkClient> { RetrofitNetworkClient(get()) }
 
+    factory {
+        TrackDbConverter()
+    }
+
     single { ThemeManager(get()) }
     single<AudioPlayerRepository> { AudioPlayerRepositoryImpl(get()) }
-    single<TrackRepository> { TrackRepositoryImpl(get()) }
+    single<SearchRepository> { SearchRepositoryImpl(networkClient = get(), storage = get()) }
     single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get(), get()) }
+    single<SearchHistoryStorage> { SharedPrefsHistoryStorage(sharedPrefs = get()) }
+    single<FavouriteTracksRepository> { FavouriteTracksRepositoryImpl(appDatabase = get(), trackDbConvertor = get()) }
 }
