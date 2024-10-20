@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.model.search.NetworkError
 import com.example.playlistmaker.domain.model.track.Track
-import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
+import com.example.playlistmaker.ui.audioplayer.activity.AudioPlayerFragment
 import com.example.playlistmaker.ui.search.models.SearchState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.ui.track.TrackAdapter
@@ -22,20 +23,21 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private lateinit var searchBinding: FragmentSearchBinding
+    private var _searchBinding: FragmentSearchBinding? = null
+    private val searchBinding get() = _searchBinding!!
     private val viewModel by viewModel<SearchViewModel>()
 
     private var searchInputQuery = ""
 
-    private val trackAdapter = TrackAdapter { showPlayer(it) }
-    private val historyAdapter = TrackAdapter { showPlayer(it) }
+    private val trackAdapter = TrackAdapter { showPlayer(track = it) }
+    private val historyAdapter = TrackAdapter { showPlayer(track = it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        searchBinding = FragmentSearchBinding.inflate(inflater, container, false)
+        _searchBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return searchBinding.root
     }
 
@@ -99,10 +101,10 @@ class SearchFragment : Fragment() {
     private fun showPlayer(track: Track) {
         if (viewModel.clickDebounce()) {
             viewModel.addTrackToHistory(track)
-            val intent = Intent(requireContext(), AudioPlayerActivity::class.java).apply {
-                putExtra("track", track)
-            }
-            startActivity(intent)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_audioplayerFragment,
+                AudioPlayerFragment.createArgs(track)
+            )
         }
     }
 
@@ -185,6 +187,11 @@ class SearchFragment : Fragment() {
         searchBinding.searchHistoryLayout.isVisible = false
         searchBinding.recyclerSearch.isVisible = false
         searchBinding.progressBar.isVisible = false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _searchBinding = null
     }
 }
 

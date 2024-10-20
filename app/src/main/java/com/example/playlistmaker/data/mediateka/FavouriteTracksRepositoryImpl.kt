@@ -1,8 +1,8 @@
 package com.example.playlistmaker.data.mediateka
 
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.db.TrackDbConverter
-import com.example.playlistmaker.data.db.TrackEntity
+import com.example.playlistmaker.data.db.DbConverter
+import com.example.playlistmaker.data.db.track.TrackEntity
 import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
 import com.example.playlistmaker.domain.model.track.Track
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 
 class FavouriteTracksRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConvertor: TrackDbConverter,
+    private val trackDbConvertor: DbConverter,
 ): FavouriteTracksRepository {
 
     override suspend fun getFavoritesTracks(): Flow<List<Track>> = flow {
@@ -18,7 +18,7 @@ class FavouriteTracksRepositoryImpl(
         emit(convertFromTrackEntity(tracks))
     }
 
-    override suspend fun isFavoriteTrack(trackId: Int): Flow<Boolean> = flow {
+    override suspend fun isFavoriteTrack(trackId: Long): Flow<Boolean> = flow {
         val isFavorite = appDatabase.TrackDao().isFavoriteTrack(trackId)
         emit(isFavorite)
     }
@@ -27,7 +27,7 @@ class FavouriteTracksRepositoryImpl(
         appDatabase.TrackDao().addToFavorites(trackDbConvertor.mapFromTrackToTrackEntity(track))
     }
 
-    override suspend fun deleteFromFavorites(trackId: Int) {
+    override suspend fun deleteFromFavorites(trackId: Long) {
         appDatabase.TrackDao().deleteFromFavorites(trackId)
     }
 

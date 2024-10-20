@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/main"
-    tools:context=".ui.audioplayer.activity.AudioPlayerActivity"
+    tools:context=".ui.audioplayer.activity.AudioPlayerFragment"
     style="@style/SettingsBackground">
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,7 +80,7 @@
         android:layout_marginTop="@dimen/button_dimen_24dp"
         android:text="Nirvana"
         />
-        <!--12 или 24? внизу 20 или 28?-->
+
     <ImageView
         android:id="@+id/addToPlaylistButton"
         style="@style/AddToPlaylistButton"
@@ -239,3 +244,61 @@
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bottom_sheet_view"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_linear"
+        style="@style/BottomSheetStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_for_bottom_sheet"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/otstup_knopok_16dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="500dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            style="@style/View_color"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/search_radius_padding_8dp"
+            android:background="@color/grey_search" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TrackTextStyle"
+            android:layout_marginHorizontal="@dimen/otstup_knopok_16dp"
+            android:layout_marginTop="@dimen/margin_30dp"
+            android:gravity="center"
+            android:text="@string/add_to_playlist"
+            android:textSize="@dimen/text_19sp" />
+
+        <Button
+            android:id="@+id/newPlaylist_button"
+            style="@style/UpdateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_30dp"
+            android:text="@string/new_playlist"
+            app:cornerRadius="54dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playlists_bottom_sheet_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/button_dimen_24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/bottom_sheet_playlists_item"/>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
