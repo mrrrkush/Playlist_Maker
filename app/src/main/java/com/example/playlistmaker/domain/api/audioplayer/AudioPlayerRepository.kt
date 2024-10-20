@@ -1,14 +1,12 @@
 package com.example.playlistmaker.domain.api.audioplayer
 
+import com.example.playlistmaker.ui.audioplayer.models.PlayerState
+
 interface AudioPlayerRepository {
-    fun setDataSource(url: String)
-    fun prepare()
-    fun start()
-    fun pause()
-    fun stop()
-    fun release()
-    fun isPlaying(): Boolean
-    fun getCurrentPosition(): Int
-    fun setOnPreparedListener(listener: () -> Unit)
-    fun setOnCompletionListener(listener: () -> Unit)
+    fun preparePlayer(url: String)
+    fun startPlayer()
+    fun pausePlayer()
+    fun reset()
+    fun getPosition() : Long
+    fun setOnStateChangeListener(callback: (PlayerState) -> Unit)
 }

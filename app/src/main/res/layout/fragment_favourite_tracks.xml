@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ui.mediateka.activity.FavouriteTracksFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="ui.mediateka.activity.FavouriteTrackFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/SettingsBackground">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favouriteTracksRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/otstup_knopok_16dp"
+        android:layout_marginTop="@dimen/otstup_knopok_16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/search_track" />
 
     <TextView
         android:id="@+id/nothingFound"
