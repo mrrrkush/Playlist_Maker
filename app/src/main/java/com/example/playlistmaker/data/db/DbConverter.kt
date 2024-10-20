@@ -1,9 +1,13 @@
 package com.example.playlistmaker.data.db
 
+import androidx.core.net.toUri
+import com.example.playlistmaker.data.db.playlist.PlaylistEntity
+import com.example.playlistmaker.data.db.track.TrackEntity
+import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
 import java.util.Calendar
 
-class TrackDbConverter {
+class DbConverter {
 
     fun mapFromTrackEntityToTrack(from: TrackEntity): Track {
         return Track(
@@ -33,6 +37,28 @@ class TrackDbConverter {
             country = from.country,
             previewUrl = from.previewUrl,
             Calendar.getInstance().timeInMillis
+        )
+    }
+
+    fun mapFromPlaylistEntityToPlaylist(from: PlaylistEntity): Playlist {
+        return Playlist(
+            id = from.id,
+            title = from.title,
+            description = from.description,
+            imageUri = from.imageUri.toUri(),
+            trackList = from.trackList,
+            size = from.size
+        )
+    }
+
+    fun mapFromPlaylistToPlaylistEntity(from: Playlist): PlaylistEntity {
+        return PlaylistEntity(
+            id = from.id,
+            title = from.title,
+            description = from.description,
+            imageUri = from.imageUri.toString(),
+            trackList = from.trackList,
+            size = from.size
         )
     }
 }

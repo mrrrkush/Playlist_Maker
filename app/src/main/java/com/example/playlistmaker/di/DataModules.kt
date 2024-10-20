@@ -13,9 +13,13 @@ import com.example.playlistmaker.data.searchHistory.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.searchHistory.SearchHistoryStorage
 import com.example.playlistmaker.data.searchHistory.SharedPrefsHistoryStorage
 import com.example.playlistmaker.data.settings.ThemeManager
-import com.example.playlistmaker.data.db.TrackDbConverter
+import com.example.playlistmaker.data.db.DbConverter
+import com.example.playlistmaker.data.localStorage.LocalStorage
+import com.example.playlistmaker.data.localStorage.LocalStorageImpl
+import com.example.playlistmaker.data.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
 import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
+import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
 import com.example.playlistmaker.domain.api.search.SearchRepository
 import com.example.playlistmaker.domain.api.searchHistory.SearchHistoryRepository
 import com.google.gson.Gson
@@ -44,7 +48,7 @@ val dataModule = module {
     single<NetworkClient> { RetrofitNetworkClient(get()) }
 
     factory {
-        TrackDbConverter()
+        DbConverter()
     }
 
     single { ThemeManager(get()) }
@@ -53,4 +57,6 @@ val dataModule = module {
     single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get(), get()) }
     single<SearchHistoryStorage> { SharedPrefsHistoryStorage(sharedPrefs = get()) }
     single<FavouriteTracksRepository> { FavouriteTracksRepositoryImpl(appDatabase = get(), trackDbConvertor = get()) }
+    single<PlaylistRepository> { PlaylistRepositoryImpl(appDatabase = get(), dbConvertor = get(), localStorage = get()) }
+    single<LocalStorage> { LocalStorageImpl(context = get()) }
 }
