@@ -81,8 +81,11 @@ class AudioPlayerFragment : Fragment() {
             viewModel.onFavouriteClicked(track)
         }
 
-        bottomSheetPlaylistsAdapter.onPlayListClicked = {
-            viewModel.addTrackToPlayList(track, it)
+        bottomSheetPlaylistsAdapter.onPlayListClicked = { playlist ->
+            viewModel.addTrackToPlayList(track, playlist)
+        }
+
+        viewModel.closeBottomSheetEvent.observe(viewLifecycleOwner) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 

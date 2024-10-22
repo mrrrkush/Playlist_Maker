@@ -40,6 +40,9 @@ class AudioPlayerViewModel(
     private val _isAlreadyInPlaylist = MutableLiveData<Pair<String, Boolean>>()
     val isAlreadyInPlaylist: LiveData<Pair<String, Boolean>> = _isAlreadyInPlaylist
 
+    private val _closeBottomSheetEvent = MutableLiveData<Unit>()
+    val closeBottomSheetEvent: LiveData<Unit> = _closeBottomSheetEvent
+
     init {
         playerInteractor.setOnStateChangeListener { state ->
             stateLiveData.postValue(state)
@@ -111,8 +114,11 @@ class AudioPlayerViewModel(
 
     fun addTrackToPlayList(track: Track, playlist: Playlist) {
         viewModelScope.launch {
-            playlistInteractor.addTrackToPlayList(track, playlist).collect {
-                _isAlreadyInPlaylist.postValue(Pair(playlist.title, it))
+            playlistInteractor.addTrackToPlayList(track, playlist).collect { isAdded ->
+                _isAlreadyInPlaylist.postValue(Pair(playlist.title, isAdded))
+                if (isAdded) {
+                    _closeBottomSheetEvent.postValue(Unit)
+                }
             }
         }
     }

@@ -139,9 +139,11 @@ class SearchFragment : Fragment() {
             searchBinding.recyclerSearch.isVisible = true
         }
     }
+
     private fun showHistoryList(tracks: List<Track>) {
         clearContent()
-        historyAdapter.tracks.addAll(tracks)
+        historyAdapter.tracks.clear()
+        historyAdapter.tracks.addAll(tracks.reversed())
         if (tracks.isNotEmpty()) {
             searchBinding.searchHistoryLayout.isVisible = true
             searchBinding.clearHistoryButton.isVisible = true
