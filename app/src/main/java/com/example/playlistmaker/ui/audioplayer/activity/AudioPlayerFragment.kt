@@ -103,7 +103,7 @@ class AudioPlayerFragment : Fragment() {
             }
         }
         playerBinding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
+            findNavController().navigate(R.id.action_audioplayerFragment_to_newPlaylistFragment)
         }
     }
 
@@ -145,7 +145,7 @@ class AudioPlayerFragment : Fragment() {
         playerBinding.apply {
             Glide
                 .with(trackCoverPlayer)
-                .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+                .load(track.artworkUrl60.replaceAfterLast('/', "512x512bb.jpg"))
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.search_radius_padding_8dp)))

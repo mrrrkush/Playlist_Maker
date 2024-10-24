@@ -12,14 +12,14 @@ class PlaylistsDiffCallback(
     override fun getNewListSize() = newList.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldTrack = oldList[oldItemPosition]
-        val newTrack = newList[oldItemPosition]
-        return oldTrack.id == newTrack.id
+        val oldPlaylist = oldList[oldItemPosition]
+        val newPlaylist = newList[newItemPosition]
+        return oldPlaylist.id == newPlaylist.id
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldTrack = oldList[oldItemPosition]
-        val newTrack = newList[oldItemPosition]
-        return oldTrack == newTrack
+        val oldPlaylist = oldList[oldItemPosition]
+        val newPlaylist = newList[newItemPosition]
+        return oldPlaylist == newPlaylist
     }
 }

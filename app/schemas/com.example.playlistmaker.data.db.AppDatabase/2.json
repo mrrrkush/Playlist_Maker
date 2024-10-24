@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "5406cf96b96c32e9451441c0d26e1d10",
+    "identityHash": "8097047e0f111dc01c767aac91dd5e0e",
     "entities": [
       {
         "tableName": "track_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `trackName` TEXT NOT NULL, `artistName` TEXT NOT NULL, `trackTimeMillis` INTEGER NOT NULL, `artworkUrl100` TEXT NOT NULL, `collectionName` TEXT NOT NULL, `releaseDate` TEXT, `primaryGenreName` TEXT NOT NULL, `country` TEXT NOT NULL, `previewUrl` TEXT, `favouriteAddedTimestamp` INTEGER NOT NULL, PRIMARY KEY(`trackId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trackId` INTEGER NOT NULL, `trackName` TEXT NOT NULL, `artistName` TEXT NOT NULL, `trackTimeMillis` INTEGER NOT NULL, `artworkUrl60` TEXT NOT NULL, `collectionName` TEXT NOT NULL, `releaseDate` TEXT, `primaryGenreName` TEXT NOT NULL, `country` TEXT NOT NULL, `previewUrl` TEXT, `favouriteAddedTimestamp` INTEGER NOT NULL, PRIMARY KEY(`trackId`))",
         "fields": [
           {
             "fieldPath": "trackId",
@@ -33,8 +33,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "artworkUrl100",
-            "columnName": "artworkUrl100",
+            "fieldPath": "artworkUrl60",
+            "columnName": "artworkUrl60",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -138,7 +138,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5406cf96b96c32e9451441c0d26e1d10')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8097047e0f111dc01c767aac91dd5e0e')"
     ]
   }
 }

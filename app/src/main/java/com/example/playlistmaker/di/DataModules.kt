@@ -5,18 +5,18 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.audioplayer.AudioPlayerRepositoryImpl
+import com.example.playlistmaker.data.db.DbConverter
+import com.example.playlistmaker.data.localStorage.LocalStorage
+import com.example.playlistmaker.data.localStorage.LocalStorageImpl
 import com.example.playlistmaker.data.mediateka.FavouriteTracksRepositoryImpl
 import com.example.playlistmaker.data.network.ITunesAPI
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.data.search.SearchRepositoryImpl
 import com.example.playlistmaker.data.searchHistory.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.searchHistory.SearchHistoryStorage
 import com.example.playlistmaker.data.searchHistory.SharedPrefsHistoryStorage
 import com.example.playlistmaker.data.settings.ThemeManager
-import com.example.playlistmaker.data.db.DbConverter
-import com.example.playlistmaker.data.localStorage.LocalStorage
-import com.example.playlistmaker.data.localStorage.LocalStorageImpl
-import com.example.playlistmaker.data.playlist.PlaylistRepositoryImpl
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
 import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksRepository
 import com.example.playlistmaker.domain.api.playlist.PlaylistRepository
@@ -58,5 +58,5 @@ val dataModule = module {
     single<SearchHistoryStorage> { SharedPrefsHistoryStorage(sharedPrefs = get()) }
     single<FavouriteTracksRepository> { FavouriteTracksRepositoryImpl(appDatabase = get(), trackDbConvertor = get()) }
     single<PlaylistRepository> { PlaylistRepositoryImpl(appDatabase = get(), dbConvertor = get(), localStorage = get()) }
-    single<LocalStorage> { LocalStorageImpl(context = get()) }
+    single<LocalStorage> { LocalStorageImpl(context = get(), sharedPreferences = get()) }
 }

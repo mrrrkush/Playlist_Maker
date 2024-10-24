@@ -33,4 +33,10 @@ class PlaylistViewModel(private val playlistInteractor: PlaylistInteractor): Vie
             _stateLiveData.postValue(PlaylistsScreenState.Filled(playlists))
         }
     }
+
+    fun saveCurrentPlaylistId(id: Long) {
+        viewModelScope.launch {
+            playlistInteractor.saveCurrentPlaylistId(id)
+        }
+    }
 }

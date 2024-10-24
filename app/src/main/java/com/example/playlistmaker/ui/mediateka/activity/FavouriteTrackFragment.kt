@@ -21,8 +21,8 @@ class FavouriteTrackFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<FavouriteTrackViewModel>()
 
-    private val favoritesTracksAdapter = TrackAdapter {
-        showPlayer(track = it)
+    private val favoritesTracksAdapter by lazy {
+        TrackAdapter({ showPlayer(track = it) }, { showLongClickOnTrack(track = it) })
     }
 
     override fun onCreateView(
@@ -63,7 +63,7 @@ class FavouriteTrackFragment : Fragment() {
     private fun showPlayer(track: Track) {
         if (viewModel.clickDebounce()) {
             findNavController().navigate(
-                R.id.action_mediaLibraryFragment_to_audioplayerFragment,
+                R.id.action_mediatekaFragment_to_audioplayerFragment,
                 AudioPlayerFragment.createArgs(track)
             )
         }
@@ -72,6 +72,10 @@ class FavouriteTrackFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.getFavouriteTracks()
+    }
+
+    private fun showLongClickOnTrack(track: Track) {
+        //
     }
 
     override fun onDestroyView() {

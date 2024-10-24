@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.model.track.Track
 
-class TrackAdapter(private val clickListener: TrackClickListener) :
+class TrackAdapter(
+    private val clickListener: TrackClickListener,
+    private val longClick: LongTrackClickListener
+) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = mutableListOf<Track>()
@@ -27,14 +30,24 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
-        holder.itemView.setOnClickListener { clickListener.onTrackClick(tracks[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener {
+            clickListener.onTrackClick(tracks[holder.adapterPosition])
+        }
+        holder.itemView.setOnLongClickListener {
+            longClick.onTrackLongClick(tracks[holder.adapterPosition])
+            true
+        }
     }
 
     fun interface TrackClickListener {
         fun onTrackClick(track: Track)
     }
 
-    fun clearTracks () {
+    fun interface LongTrackClickListener {
+        fun onTrackLongClick(track: Track)
+    }
+
+    fun clearTracks() {
         tracks = ArrayList()
     }
 }

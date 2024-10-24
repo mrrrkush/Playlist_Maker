@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.db
 
-import androidx.core.net.toUri
 import com.example.playlistmaker.data.db.playlist.PlaylistEntity
 import com.example.playlistmaker.data.db.track.TrackEntity
 import com.example.playlistmaker.domain.model.playlist.Playlist
@@ -15,7 +14,7 @@ class DbConverter {
             trackName = from.trackName,
             artistName = from.artistName,
             trackTimeMillis = from.trackTimeMillis,
-            artworkUrl100 = from.artworkUrl100,
+            artworkUrl60 = from.artworkUrl60,
             collectionName = from.collectionName,
             releaseDate = from.releaseDate,
             primaryGenreName = from.primaryGenreName,
@@ -30,7 +29,7 @@ class DbConverter {
             trackName = from.trackName,
             artistName = from.artistName,
             trackTimeMillis = from.trackTimeMillis,
-            artworkUrl100 = from.artworkUrl100,
+            artworkUrl60 = from.artworkUrl60,
             collectionName = from.collectionName,
             releaseDate = from.releaseDate,
             primaryGenreName = from.primaryGenreName,
@@ -45,7 +44,7 @@ class DbConverter {
             id = from.id,
             title = from.title,
             description = from.description,
-            imageUri = from.imageUri.toUri(),
+            imageUri = from.imageUri,
             trackList = from.trackList,
             size = from.size
         )

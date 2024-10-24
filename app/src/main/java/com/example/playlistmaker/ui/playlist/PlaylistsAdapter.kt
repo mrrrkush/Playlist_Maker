@@ -31,10 +31,9 @@ class PlaylistsAdapter(private val viewObject: ViewObjects) :
     override fun getItemCount() = playlists.size
 
     override fun onBindViewHolder(holder: PlaylistsViewHolder, position: Int) {
-        val playlist = playlists[position]
-        holder.bind(playlist)
+        holder.bind(playlists[position])
         holder.itemView.setOnClickListener {
-            onPlayListClicked?.invoke(playlist)
+            onPlayListClicked?.invoke(playlists[holder.adapterPosition])
         }
     }
 }

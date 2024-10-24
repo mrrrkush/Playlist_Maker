@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ScreenOuterLayoutStyle"
-    tools:context="ui.mediateka.activity.NewPlaylistFragment">
+    tools:context="ui.mediateka.activity.BasePlaylistFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -32,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/new_playlist"
             android:textSize="@dimen/text_main_22sp"/>
     </com.google.android.material.appbar.MaterialToolbar>
 
