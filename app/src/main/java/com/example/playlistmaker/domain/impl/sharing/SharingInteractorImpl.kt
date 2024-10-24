@@ -36,4 +36,8 @@ class SharingInteractorImpl(
     private fun getTermsLink(): String {
         return "https://yandex.ru/legal/practicum_offer/"
     }
+
+    override fun sharePlaylist(playlist: String) {
+        externalNavigator.sharePlaylist(playlist)
+    }
 }

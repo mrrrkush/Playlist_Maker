@@ -1,50 +1,37 @@
 package com.example.playlistmaker.ui.mediateka.activity
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
+import com.example.playlistmaker.databinding.FragmentBasePlaylistBinding
 import com.example.playlistmaker.domain.model.playlist.Playlist
-import com.example.playlistmaker.ui.mediateka.view_model.NewPlaylistViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlaylistFragment : Fragment() {
-
-    private var _binding: FragmentNewPlaylistBinding? = null
-    private val binding get() = _binding!!
-
-    private var imageUri: Uri? = null
-
-    private val viewModel by viewModel<NewPlaylistViewModel>()
+class NewPlaylistFragment : BasePlaylistFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNewPlaylistBinding.inflate(inflater, container, false)
+        _binding = FragmentBasePlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initPickMediaRegister()
         initListeners()
     }
 
     private fun initListeners() {
+
+        binding.pickImage.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         binding.buttonCreatePlaylist.setOnClickListener {
             val playlist = Playlist(
@@ -56,7 +43,6 @@ class NewPlaylistFragment : Fragment() {
             )
 
             viewModel.savePlaylist(playlist)
-
             imageUri?.let { viewModel.saveToLocalStorage(uri = it) }
 
             Toast.makeText(
@@ -64,10 +50,10 @@ class NewPlaylistFragment : Fragment() {
                 String.format(getString(R.string.playlist_created), playlist.title),
                 Toast.LENGTH_SHORT
             ).show()
-
             findNavController().popBackStack()
         }
 
+        binding.newPlaylistToolbar.title = getString(R.string.new_playlist)
         binding.newPlaylistToolbar.setOnClickListener {
             if (binding.editTextPlaylistTitle.text.toString().isNotEmpty() ||
                 binding.editTextPlaylistDescription.text.toString()
@@ -79,79 +65,23 @@ class NewPlaylistFragment : Fragment() {
             }
         }
 
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (imageUri != null ||
-                    !binding.editTextPlaylistTitle.text.isNullOrEmpty() ||
-                    !binding.editTextPlaylistDescription.text.isNullOrEmpty()) {
-                    showConfirmDialog()
-                } else {
-                    findNavController().navigateUp()
-                }
-            }
-        })
-
-        binding.editTextPlaylistTitle.doOnTextChanged { text, _, _, _ ->
-            if (text != null) {
-                if (text.isNotEmpty()) {
-                    binding.buttonCreatePlaylist.isEnabled = true
-                    context?.let {
-                        ContextCompat.getColor(
-                            it,
-                            R.color.blue
-                        )
-                    }?.let {
-                        binding.buttonCreatePlaylist.setBackgroundColor(
-                            it
-                        )
-                    }
-                } else {
-                    binding.buttonCreatePlaylist.isEnabled = false
-                    context?.let {
-                        ContextCompat.getColor(
-                            it,
-                            R.color.grey_icons
-                        )
-                    }?.let {
-                        binding.buttonCreatePlaylist.setBackgroundColor(
-                            it
-                        )
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (imageUri != null ||
+                        !binding.editTextPlaylistTitle.text.isNullOrEmpty() ||
+                        !binding.editTextPlaylistDescription.text.isNullOrEmpty()
+                    ) {
+                        showConfirmDialog()
+                    } else {
+                        findNavController().navigateUp()
                     }
                 }
-            }
-        }
+            })
+
+        binding.editTextPlaylistTitle.addTextChangedListener(textWatcher)
     }
-
-    private fun initPickMediaRegister() {
-        val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    binding.pickImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                    binding.pickImage.setImageURI(uri)
-                    imageUri = uri
-                }
-            }
-
-        binding.pickImage.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-    }
-
-    private fun showConfirmDialog() {
-        MaterialAlertDialogBuilder(
-            requireContext(),
-            R.style.MaterialAlertDialog
-        )
-                .setTitle(R.string.stop_creating_playlist)
-                .setMessage(R.string.unsaved_data_will_be_lost)
-                .setNegativeButton(R.string.cancel) { dialog, which ->
-                }
-                .setPositiveButton(R.string.finish) { dialog, which ->
-                    findNavController().popBackStack()
-                }
-                .show()
-        }
 
     override fun onDestroyView() {
         super.onDestroyView()
