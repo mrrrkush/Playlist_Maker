@@ -1,12 +1,13 @@
 package com.example.playlistmaker.domain.model.playlist
 
-import java.io.Serializable
+import android.net.Uri
 
 data class Playlist(
-    var id: Long = 0,
-    var title: String,
-    val description: String,
-    val imageUri: String? = null,
-    var trackList: String,
-    var size: Int,
-): Serializable
+    val id: Int,
+    val name: String,
+    val description: String?,
+    val coverUri: Uri?,
+    val tracksId: List<Int>,
+    val numberOfTracks: Int = tracksId.size,
+    val playlistDuration: Long
+)

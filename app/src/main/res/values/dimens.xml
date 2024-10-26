@@ -27,4 +27,5 @@
     <dimen name="margin_30dp">30dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="textSize_18sp">18sp</dimen>
+    <dimen name="layout_height_64dp">64dp</dimen>
 </resources>

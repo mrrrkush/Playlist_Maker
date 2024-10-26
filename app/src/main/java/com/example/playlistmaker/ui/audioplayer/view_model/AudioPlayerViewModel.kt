@@ -5,125 +5,129 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
-import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksInteractor
-import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
+import com.example.playlistmaker.domain.api.mediateka.favourites.FavoritesTracksInteractor
+import com.example.playlistmaker.domain.api.mediateka.playlist.PlaylistInteractor
 import com.example.playlistmaker.domain.model.playlist.Playlist
 import com.example.playlistmaker.domain.model.track.Track
+import com.example.playlistmaker.ui.audioplayer.models.FavoriteState
 import com.example.playlistmaker.ui.audioplayer.models.PlayerState
-import com.example.playlistmaker.util.formatAsTime
+import com.example.playlistmaker.ui.mediateka.models.PlaylistsState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
+    private val track: Track,
     private val playerInteractor: AudioPlayerInteractor,
-    private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val favoritesTracksInteractor: FavoritesTracksInteractor,
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
     private var timerJob: Job? = null
-    private var isFavourite = false
+    private var trackInFavorites = false
 
-    private val stateLiveData = MutableLiveData<PlayerState>()
-    fun observeState(): LiveData<PlayerState> = stateLiveData
+    private val _playerState = MutableLiveData<PlayerState>()
+    val playerState: LiveData<PlayerState>
+        get() = _playerState
 
-    private val timeLiveData = MutableLiveData<String>()
-    fun observeTime(): LiveData<String> = timeLiveData
+    private val _isFavorite = MutableLiveData<FavoriteState>()
+    val isFavorite: LiveData<FavoriteState>
+        get() = _isFavorite
 
-    private val isFavouriteLiveData = MutableLiveData<Boolean>()
-    fun observeIsFavourite(): LiveData<Boolean> = isFavouriteLiveData
-
-    private val _playlists = MutableLiveData<List<Playlist>>()
-    val playlists: LiveData<List<Playlist>> = _playlists
-
-    private val _isAlreadyInPlaylist = MutableLiveData<Pair<String, Boolean>>()
-    val isAlreadyInPlaylist: LiveData<Pair<String, Boolean>> = _isAlreadyInPlaylist
-
-    private val _closeBottomSheetEvent = MutableLiveData<Unit>()
-    val closeBottomSheetEvent: LiveData<Unit> = _closeBottomSheetEvent
+    private val _playlistsState = MutableLiveData<PlaylistsState>()
+    val playlistsState: LiveData<PlaylistsState>
+        get() = _playlistsState
 
     init {
-        playerInteractor.setOnStateChangeListener { state ->
-            stateLiveData.postValue(state)
-            if (state == PlayerState.STATE_COMPLETE) timerJob?.cancel()
-        }
-    }
-
-    private fun startTimer() {
-        timerJob = viewModelScope.launch {
-            while (isActive) {
-                delay(DELAY_TIME_MILLIS)
-                timeLiveData.postValue(playerInteractor.getPosition().formatAsTime())
+        track.previewUrl?.let {
+            playerInteractor.createPlayer(it) {
+                _playerState.postValue(playerInteractor.getPlayerState())
             }
         }
     }
 
-    fun prepare(url: String) {
-        timerJob?.cancel()
-        playerInteractor.preparePlayer(url)
+    override fun onCleared() {
+        super.onCleared()
+        playerInteractor.release()
     }
 
-    fun play() {
-        playerInteractor.startPlayer()
-        startTimer()
-    }
-
-    fun pause() {
-        playerInteractor.pausePlayer()
-        timerJob?.cancel()
-    }
-
-    fun reset() {
-        playerInteractor.reset()
-        timerJob?.cancel()
-    }
-
-    fun checkIsFavourite(trackId: Long) {
+    fun checkFavoriteBtn() {
         viewModelScope.launch {
-            favouriteTracksInteractor
-                .isFavoriteTrack(trackId)
-                .collect { isFavorite ->
-                    isFavourite = isFavorite
-                    isFavouriteLiveData.postValue(isFavourite)
+            favoritesTracksInteractor.checkTrackById(track!!.trackId)
+                .collect { value ->
+                    trackInFavorites = value
+                    _isFavorite.postValue(FavoriteState(trackInFavorites))
                 }
         }
     }
 
-    fun onFavouriteClicked(track: Track) {
+    fun toggleFavorite() {
         viewModelScope.launch {
-            isFavourite = if (isFavourite) {
-                favouriteTracksInteractor.deleteFromFavorites(track.trackId)
-                isFavouriteLiveData.postValue(false)
-                false
+            if (trackInFavorites) {
+                favoritesTracksInteractor.deleteTrack(track!!)
+                checkFavoriteBtn()
             } else {
-                favouriteTracksInteractor.addToFavorites(track)
-                isFavouriteLiveData.postValue(true)
-                true
+                favoritesTracksInteractor.insertTrack(track!!)
+                checkFavoriteBtn()
             }
         }
     }
 
-    fun fillData() {
-        viewModelScope.launch {
-            playlistInteractor.getPlaylists().collect {
-                _playlists.postValue(it)
+    fun onPlayButtonClicked() {
+        when (_playerState.value) {
+            is PlayerState.Playing -> {
+                onPause()
+            }
+
+            is PlayerState.Prepared, is PlayerState.Paused -> {
+                startPlayer()
+            }
+
+            is PlayerState.Default -> {
+            }
+
+            else -> {
             }
         }
     }
 
-    fun addTrackToPlayList(track: Track, playlist: Playlist) {
+    fun getAllPlaylists() {
         viewModelScope.launch {
-            playlistInteractor.addTrackToPlayList(track, playlist).collect { isAdded ->
-                _isAlreadyInPlaylist.postValue(Pair(playlist.title, isAdded))
-                if (isAdded) {
-                    _closeBottomSheetEvent.postValue(Unit)
-                }
+            playlistInteractor.getAllPlaylists().collect {
+                _playlistsState.postValue(PlaylistsState.ShowPlaylists(it))
             }
         }
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        if (playlist.tracksId.contains(track!!.trackId.toInt())) {
+            _playlistsState.value =
+                PlaylistsState.AlreadyAdded(playlist.name)
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackToPlaylist(track!!, playlist)
+                _playlistsState.postValue(PlaylistsState.WasAdded(playlist.name))
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        playerInteractor.play()
+        timerJob = viewModelScope.launch {
+            while (true) {
+                delay(UPDATE_DELAY)
+                _playerState.postValue(playerInteractor.getPlayerState())
+            }
+        }
+    }
+
+    fun onPause() {
+        playerInteractor.pause()
+        _playerState.postValue(playerInteractor.getPlayerState())
+        timerJob?.cancel()
     }
 
     companion object {
-        const val DELAY_TIME_MILLIS = 300L
+        private const val UPDATE_DELAY = 300L
     }
 }

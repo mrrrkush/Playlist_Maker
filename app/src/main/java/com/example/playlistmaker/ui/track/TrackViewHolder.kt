@@ -25,11 +25,10 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
 
         Glide.with(itemView.context)
-            .load(model.artworkUrl60)
+            .load(model.artworkUrl100)
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.radius_2dp)))
             .into(trackImage)
     }
-
 }

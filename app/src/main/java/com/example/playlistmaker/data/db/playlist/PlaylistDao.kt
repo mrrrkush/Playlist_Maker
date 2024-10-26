@@ -1,29 +1,24 @@
 package com.example.playlistmaker.data.db.playlist
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 
 @Dao
 interface PlaylistDao {
+    @Upsert
+    suspend fun savePlaylist(playlistEntity: PlaylistEntity)
 
-    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPlaylist(playlistEntity: PlaylistEntity)
+    @Query("SELECT * FROM playlist_table WHERE id = :playlistId LIMIT 1")
+    suspend fun getPlaylistById(playlistId: Int): PlaylistEntity
 
-    @Query("DELETE FROM ${PlaylistEntity.TABLE_NAME} WHERE id = :id")
-    suspend fun deletePlaylist(id: Long)
-
-    @Query("SELECT * FROM ${PlaylistEntity.TABLE_NAME} ORDER BY id DESC")
-    suspend fun getPlaylists(): List<PlaylistEntity>
+    @Query("SELECT * FROM playlist_table ORDER BY createTime DESC")
+    suspend fun getAllPlaylists(): List<PlaylistEntity>
 
     @Update
-    suspend fun updatePlaylist(playlistEntity: PlaylistEntity)
+    suspend fun updateTracksInPlaylist(playlistEntity: PlaylistEntity)
 
-    @Query("SELECT * FROM ${PlaylistEntity.TABLE_NAME} WHERE id = :id")
-    suspend fun getPlaylistById(id: Long): PlaylistEntity
-
-    @Query("SELECT trackList FROM ${PlaylistEntity.TABLE_NAME} WHERE id = :id")
-    suspend fun getTracksFromPlaylist(id: Long): String
+    @Query("DELETE FROM playlist_table WHERE id = :playlistId")
+    suspend fun deletePlaylist(playlistId: Int)
 }

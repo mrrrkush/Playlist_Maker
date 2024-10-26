@@ -39,13 +39,13 @@ class ExternalNavigator(private val context: Context) {
         context.startActivity(emailIntent)
     }
 
-    fun sharePlaylist(playlist: String) {
-        val sendIntent: Intent = Intent().apply {
+    fun sharePlaylist(playlistDesc: String) {
+        Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, playlist)
+            putExtra(Intent.EXTRA_TEXT, playlistDesc)
             type = "text/plain"
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(this)
         }
-        val shareIntent = Intent.createChooser(sendIntent, chooseApp)
-        context.startActivity(shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 }

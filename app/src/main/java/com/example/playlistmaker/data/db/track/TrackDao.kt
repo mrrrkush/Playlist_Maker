@@ -1,22 +1,22 @@
 package com.example.playlistmaker.data.db.track
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface TrackDao {
-
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToFavorites(track: TrackEntity)
+    suspend fun insertTrack(track: TrackEntity)
 
-    @Query("DELETE FROM ${TrackEntity.TABLE_NAME} WHERE trackId = :trackId")
-    suspend fun deleteFromFavorites(trackId: Long)
+    @Delete(entity = TrackEntity::class)
+    suspend fun deleteTrack(track: TrackEntity)
 
-    @Query("SELECT * FROM ${TrackEntity.TABLE_NAME} ORDER BY favouriteAddedTimestamp DESC")
-    suspend fun getTracks(): List<TrackEntity>
+    @Query("SELECT * FROM favorite_tracks_table WHERE trackId = :trackId limit 1")
+    suspend fun checkTrackById(trackId: Long): TrackEntity
 
-    @Query("SELECT EXISTS (SELECT 1 FROM ${TrackEntity.TABLE_NAME}  WHERE trackId = :trackId)")
-    suspend fun isFavoriteTrack(trackId: Long): Boolean
+    @Query("SELECT * FROM favorite_tracks_table ORDER BY addTime DESC")
+    suspend fun getFavoritesTracks(): List<TrackEntity>
 }

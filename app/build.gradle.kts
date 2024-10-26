@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("androidx.room")
     id("org.jetbrains.kotlin.kapt")
+    id ("kotlin-parcelize")
 }
 
 android {

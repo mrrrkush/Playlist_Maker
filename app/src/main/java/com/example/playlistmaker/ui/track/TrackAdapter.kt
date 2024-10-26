@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.model.track.Track
 
-class TrackAdapter(
-    private val clickListener: TrackClickListener,
-    private val longClick: LongTrackClickListener
-) :
+class TrackAdapter(private val clickListener: TrackClickListener) :
     RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = mutableListOf<Track>()
@@ -21,33 +18,29 @@ class TrackAdapter(
             diffResult.dispatchUpdatesTo(this)
         }
 
+    /*fun setTracks(content: List<Track>) {
+        tracks = content
+        this.notifyDataSetChanged()
+    }
+     */
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.search_track, parent, false)
         return TrackViewHolder(view)
     }
 
-    override fun getItemCount() = tracks.size
-
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
-        holder.itemView.setOnClickListener {
-            clickListener.onTrackClick(tracks[holder.adapterPosition])
-        }
-        holder.itemView.setOnLongClickListener {
-            longClick.onTrackLongClick(tracks[holder.adapterPosition])
-            true
-        }
+        holder.itemView.setOnClickListener { clickListener.onTrackClick(tracks[position]) }
     }
+
+    override fun getItemCount() = tracks.size
 
     fun interface TrackClickListener {
         fun onTrackClick(track: Track)
     }
 
-    fun interface LongTrackClickListener {
-        fun onTrackLongClick(track: Track)
-    }
-
-    fun clearTracks() {
+    fun clearTracks () {
         tracks = ArrayList()
     }
 }
