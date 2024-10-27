@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -79,14 +80,14 @@ class FavoritesFragment : Fragment(), TrackAdapter.TrackClickListener {
     }
 
     private fun showPlaceHolder() {
-        binding.nothingFound.visibility = View.VISIBLE
-        binding.favouriteTracksRecycler.visibility = View.GONE
+        binding.nothingFound.isVisible = true
+        binding.favouriteTracksRecycler.isVisible = false
     }
 
     private fun showFavoritesTracks(favoritesTrack: MutableList<Track>) {
         favoritesTrackAdapter.setTracks(favoritesTrack)
-        binding.nothingFound.visibility = View.GONE
-        binding.favouriteTracksRecycler.visibility = View.VISIBLE
+        binding.nothingFound.isVisible = false
+        binding.favouriteTracksRecycler.isVisible = true
     }
 
     private fun clickDebounce(): Boolean {

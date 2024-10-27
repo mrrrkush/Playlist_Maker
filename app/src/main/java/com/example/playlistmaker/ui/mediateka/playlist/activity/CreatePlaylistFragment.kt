@@ -30,7 +30,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CreatePlaylistFragment : Fragment() {
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
-
     private lateinit var binding: FragmentCreatePlaylistBinding
     private var coverUri: Uri? = null
     private var textWatcher: TextWatcher? = null
@@ -121,6 +120,7 @@ class CreatePlaylistFragment : Fragment() {
             } else {
                 viewModel.getPlaylistById(playlistId)
                 binding.buttonCreatePlaylist.text = requireContext().getString(R.string.save)
+                binding.titleCreatePlaylist.text = requireContext().getString(R.string.editing)
             }
         }
     }
@@ -128,7 +128,9 @@ class CreatePlaylistFragment : Fragment() {
     private fun renderState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.SaveSuccess -> {
-                showToast(state.name)
+                if (playlistId == 0) {
+                    showToast(state.name)
+                }
                 closePlaylistFragment()
             }
 

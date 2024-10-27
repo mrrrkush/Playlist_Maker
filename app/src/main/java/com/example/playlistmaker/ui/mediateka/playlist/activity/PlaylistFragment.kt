@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -77,14 +78,14 @@ class PlaylistFragment : Fragment() {
 
     private fun showEmpty() {
         adapter.setPlaylists(emptyList())
-        binding.playlistsGrid.visibility = View.GONE
-        binding.nothingFound.visibility = View.VISIBLE
+        binding.playlistsGrid.isVisible = false
+        binding.nothingFound.isVisible = true
     }
 
     private fun showContent(playlists: List<Playlist>) {
         adapter.setPlaylists(playlists)
-        binding.nothingFound.visibility = View.GONE
-        binding.playlistsGrid.visibility = View.VISIBLE
+        binding.nothingFound.isVisible = false
+        binding.playlistsGrid.isVisible = true
     }
 
     companion object {

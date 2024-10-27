@@ -57,20 +57,16 @@
     <string name="playlist">Плейлист \"%1$s\"</string>
 
     <plurals name="plural_tracks">
-        <item quantity="zero">0 треков</item>
         <item quantity="one">%d трек</item>
-        <item quantity="two">%d трека</item>
-        <item quantity="few">%d треков</item>
+        <item quantity="few">%d трека</item>
         <item quantity="many">%d треков</item>
         <item quantity="other">%d треков</item>
     </plurals>
 
     <plurals name="plural_minutes">
-        <item quantity="zero">0 минут</item>
-        <item quantity="one">%d минута</item>
-        <item quantity="two">%d минуты</item>
-        <item quantity="few">%d минуты</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="other">%d минут</item>
+        <item quantity="one">%s минута</item>
+        <item quantity="few">%s минуты</item>
+        <item quantity="many">%s минут</item>
+        <item quantity="other">%s минут</item>
     </plurals>
 </resources>

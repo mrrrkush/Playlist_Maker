@@ -28,12 +28,20 @@ class PlaylistRepositoryImpl(
 ) : PlaylistRepository {
 
     override suspend fun savePlaylist(playlist: Playlist) {
-        val privateStorageUri = saveImageToPrivateStorage(playlist)
-        val playlistWithPrivateStorageUri = playlist.copy(coverUri = privateStorageUri)
+        val existingPlaylist = dataBase.playlistsDao().getPlaylistById(playlist.id)
+        val existingCoverUri = existingPlaylist?.coverUri?.takeIf { it.isNotEmpty() }?.toUri()
 
+        val privateStorageUri = if (playlist.coverUri != null) {
+            saveImageToPrivateStorage(playlist)
+        } else {
+            existingCoverUri ?: "".toUri()
+        }
+
+        val playlistWithPrivateStorageUri = playlist.copy(coverUri = privateStorageUri)
         dataBase.playlistsDao()
             .savePlaylist(playlistDbConvertor.mapPlaylistToEntity(playlistWithPrivateStorageUri))
     }
+
 
     override suspend fun deletePlaylist(playlistId: Int) {
         val playlistEntity = dataBase.playlistsDao().getPlaylistById(playlistId)

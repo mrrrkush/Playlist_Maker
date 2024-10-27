@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -94,11 +95,11 @@ class DetailPlaylistFragment : Fragment() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     when (newState) {
                         STATE_HIDDEN -> {
-                            binding.overlay.visibility = View.GONE
+                            binding.overlay.isVisible = false
                         }
 
                         else -> {
-                            binding.overlay.visibility = View.VISIBLE
+                            binding.overlay.isVisible = true
                         }
                     }
                 }
@@ -128,7 +129,7 @@ class DetailPlaylistFragment : Fragment() {
 
             playlistMoreMenuIv.setOnClickListener {
                 menuBottomSheetBehavior.state = STATE_COLLAPSED
-                bottomSheetSharing.visibility = View.VISIBLE
+                bottomSheetSharing.isVisible = true
             }
 
             sharePlaylistTv.setOnClickListener {
@@ -181,40 +182,38 @@ class DetailPlaylistFragment : Fragment() {
     private fun showPlaylistInfo(playlist: Playlist) {
         with(binding) {
             with(playlist) {
-                if (!playlist.coverUri.toString().isNullOrBlank()) {
-                    Glide.with(root)
-                        .load(coverUri)
-                        .transform(
-                            CenterCrop(),
-                            RoundedCorners(
-                                resources.getDimensionPixelSize(R.dimen.search_radius_padding_8dp)
-                            ),
+                val coverUri = if (coverUri.toString().isNotBlank()) coverUri else R.drawable.placeholder_player
+                Glide.with(root)
+                    .load(coverUri)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(
+                            resources.getDimensionPixelSize(R.dimen.search_radius_padding_8dp)
                         )
-                        .into(playlistImage)
+                    )
+                    .into(playlistImage)
 
-                    Glide.with(root)
-                        .load(coverUri)
-                        .transform(
-                            CenterCrop(),
-                            RoundedCorners(
-                                resources.getDimensionPixelSize(R.dimen.radius_2dp)
-                            ),
+                Glide.with(root)
+                    .load(coverUri)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(
+                            resources.getDimensionPixelSize(R.dimen.radius_2dp)
                         )
-                        .into(playlistImageBottomSheet)
-                }
+                    )
+                    .into(playlistImageBottomSheet)
 
                 playlistTitle.text = name
-                playlistName = name
                 playlistDescription.text = description
-                playlistTimeTv.text = resources.getQuantityString(
-                    R.plurals.plural_minutes,
-                    longToMinInt(playlistDuration),
-                    playlistDuration.formatAsMinutes()
-                )
                 playlistSize.text = resources.getQuantityString(
                     R.plurals.plural_tracks,
                     numberOfTracks,
                     numberOfTracks
+                )
+                playlistTimeTv.text = resources.getQuantityString(
+                    R.plurals.plural_minutes,
+                    longToMinInt(playlistDuration),
+                    playlistDuration.formatAsMinutes()
                 )
                 playlistTitleBottomSheet.text = name
                 playlistSizeBottomSheet.text = resources.getQuantityString(
@@ -226,14 +225,15 @@ class DetailPlaylistFragment : Fragment() {
         }
     }
 
+
     private fun showTrackRv(tracks: List<Track>) {
         if (tracks.isEmpty()) {
-            binding.textNotFound.visibility = View.VISIBLE
-            binding.playlistTracksRv.visibility = View.GONE
+            binding.textNotFound.isVisible = true
+            binding.playlistTracksRv.isVisible = false
         } else {
             adapter.setTracks(tracks)
-            binding.textNotFound.visibility = View.GONE
-            binding.playlistTracksRv.visibility = View.VISIBLE
+            binding.textNotFound.isVisible = false
+            binding.playlistTracksRv.isVisible = true
         }
 
     }

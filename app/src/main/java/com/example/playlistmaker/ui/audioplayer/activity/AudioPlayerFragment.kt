@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -123,11 +124,11 @@ class AudioPlayerFragment : Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.overlay.visibility = View.GONE
+                        binding.overlay.isVisible = false
                     }
 
                     else -> {
-                        binding.overlay.visibility = View.VISIBLE
+                        binding.overlay.isVisible = true
                     }
                 }
             }
@@ -174,8 +175,8 @@ class AudioPlayerFragment : Fragment() {
 
     private fun TextView.setTextOrHide(text: String?, view: TextView) {
         if (text.isNullOrEmpty()) {
-            this.visibility = View.GONE
-            view.visibility = View.GONE
+            this.isVisible = false
+            view.isVisible = false
         } else {
             this.text = text
         }
@@ -241,20 +242,20 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun showNotReady() {
-        binding.playButton.visibility = View.VISIBLE
-        binding.pauseButton.visibility = View.GONE
+        binding.playButton.isVisible = true
+        binding.pauseButton.isVisible = false
         binding.mediaButtons.isEnabled = false
     }
 
     private fun showPlayBtn() {
-        binding.playButton.visibility = View.VISIBLE
-        binding.pauseButton.visibility = View.GONE
+        binding.playButton.isVisible = true
+        binding.pauseButton.isVisible = false
         binding.mediaButtons.isEnabled = true
     }
 
     private fun showPauseBtn() {
-        binding.playButton.visibility = View.GONE
-        binding.pauseButton.visibility = View.VISIBLE
+        binding.playButton.isVisible = false
+        binding.pauseButton.isVisible = true
         binding.mediaButtons.isEnabled = true
 
         binding.pauseButton.setOnClickListener {
