@@ -58,7 +58,7 @@ class CreatePlaylistFragment : Fragment() {
 
         initView()
         setTextWatcher()
-        binding.cardPlaceholder.setOnClickListener {
+        binding.pickImage.setOnClickListener {
             imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 

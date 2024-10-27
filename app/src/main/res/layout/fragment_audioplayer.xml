@@ -279,6 +279,7 @@
             android:layout_marginHorizontal="@dimen/otstup_knopok_16dp"
             android:layout_marginTop="@dimen/margin_30dp"
             android:gravity="center"
+            android:textFontWeight="500"
             android:text="@string/add_to_playlist"
             android:textSize="@dimen/text_19sp" />
 

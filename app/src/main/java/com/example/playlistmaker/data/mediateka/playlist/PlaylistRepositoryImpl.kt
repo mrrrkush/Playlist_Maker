@@ -36,7 +36,6 @@ class PlaylistRepositoryImpl(
         } else {
             existingCoverUri ?: "".toUri()
         }
-
         val playlistWithPrivateStorageUri = playlist.copy(coverUri = privateStorageUri)
         dataBase.playlistsDao()
             .savePlaylist(playlistDbConvertor.mapPlaylistToEntity(playlistWithPrivateStorageUri))
@@ -158,18 +157,24 @@ class PlaylistRepositoryImpl(
 
     private fun saveImageToPrivateStorage(playlist: Playlist): Uri {
         return if (playlist.coverUri != null) {
-            val filePath =
-                File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists_cover")
+            val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists_cover")
             if (!filePath.exists()) {
                 filePath.mkdirs()
             }
-            val file = File(filePath, "${playlist.name}.jpg")
-            val inputStream = context.contentResolver.openInputStream(playlist.coverUri)
-            val outputStream = FileOutputStream(file)
-            BitmapFactory
-                .decodeStream(inputStream)
-                .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+
+            // Генерируем имя файла с временной меткой
+            val fileName = "${playlist.name}_${System.currentTimeMillis()}.jpg"
+            val file = File(filePath, fileName)
+
+            context.contentResolver.openInputStream(playlist.coverUri).use { inputStream ->
+                FileOutputStream(file).use { outputStream ->
+                    BitmapFactory.decodeStream(inputStream)
+                        .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+                }
+            }
+
             file.toUri()
         } else "".toUri()
     }
+
 }
