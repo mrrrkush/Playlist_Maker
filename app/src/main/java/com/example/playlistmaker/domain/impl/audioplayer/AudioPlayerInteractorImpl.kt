@@ -5,25 +5,23 @@ import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerRepository
 import com.example.playlistmaker.ui.audioplayer.models.PlayerState
 
 class AudioPlayerInteractorImpl(private val repository: AudioPlayerRepository): AudioPlayerInteractor {
-    override fun preparePlayer(url: String) {
-        repository.preparePlayer(url)
+    override fun createPlayer(trackUrl: String, completion: () -> Unit) {
+        repository.createPlayer(trackUrl, completion)
     }
 
-    override fun startPlayer() {
-        repository.startPlayer()
+    override fun play() {
+        repository.play()
     }
 
-    override fun pausePlayer() {
-        repository.pausePlayer()
+    override fun pause() {
+        repository.pause()
     }
 
-    override fun reset() {
-        repository.reset()
+    override fun release() {
+        repository.release()
     }
 
-    override fun getPosition(): Long = repository.getPosition()
-
-    override fun setOnStateChangeListener(callback: (PlayerState) -> Unit) {
-        repository.setOnStateChangeListener(callback)
+    override fun getPlayerState(): PlayerState {
+        return repository.playerState()
     }
 }

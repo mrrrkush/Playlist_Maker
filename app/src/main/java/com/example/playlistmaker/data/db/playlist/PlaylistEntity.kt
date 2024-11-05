@@ -2,20 +2,16 @@ package com.example.playlistmaker.data.db.playlist
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.playlistmaker.data.db.playlist.PlaylistEntity.Companion.TABLE_NAME
 
-@Entity(tableName = TABLE_NAME)
-data class PlaylistEntity(
+@Entity(tableName = "playlist_table")
+data class PlaylistEntity (
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val title: String,
+    val id: Int,
+    val name: String,
     val description: String,
-    val imageUri: String,
-    val trackList: String,
-    val size: Int
-) {
-
-    companion object {
-        const val TABLE_NAME = "playlist_table"
-    }
-}
+    val coverUri: String,
+    val tracksId: String,
+    val numberOfTracks: Int,
+    val playlistDuration: Long,
+    val createTime: Long
+)

@@ -2,15 +2,15 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.domain.api.audioplayer.AudioPlayerInteractor
-import com.example.playlistmaker.domain.api.mediateka.FavouriteTracksInteractor
-import com.example.playlistmaker.domain.api.playlist.PlaylistInteractor
+import com.example.playlistmaker.domain.api.mediateka.favourites.FavoritesTracksInteractor
+import com.example.playlistmaker.domain.api.mediateka.playlist.PlaylistInteractor
 import com.example.playlistmaker.domain.api.search.SearchInteractor
 import com.example.playlistmaker.domain.api.searchHistory.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.settings.SettingsInteractor
 import com.example.playlistmaker.domain.api.sharing.SharingInteractor
 import com.example.playlistmaker.domain.impl.audioplayer.AudioPlayerInteractorImpl
-import com.example.playlistmaker.domain.impl.mediateka.FavouriteTracksInteractorImpl
-import com.example.playlistmaker.domain.impl.playlist.PlaylistInteractorImpl
+import com.example.playlistmaker.domain.impl.mediateka.favourites.FavoritesTracksInteractorImpl
+import com.example.playlistmaker.domain.impl.mediateka.playlist.PlaylistInteractorImpl
 import com.example.playlistmaker.domain.impl.search.SearchInteractorImpl
 import com.example.playlistmaker.domain.impl.searchHistory.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.settings.SettingsInteractorImpl
@@ -26,6 +26,6 @@ val domainModule = module {
     factory<SharingInteractor> { SharingInteractorImpl(get()) }
     single<SearchInteractor> { SearchInteractorImpl(repository = get()) }
     factory<SearchHistoryInteractor> { SearchHistoryInteractorImpl(get()) }
-    single<FavouriteTracksInteractor> { FavouriteTracksInteractorImpl(favouriteTracksRepository = get()) }
-    single<PlaylistInteractor> { PlaylistInteractorImpl(playlistRepository = get()) }
+    single<FavoritesTracksInteractor> { FavoritesTracksInteractorImpl(repository = get()) }
+    single<PlaylistInteractor> { PlaylistInteractorImpl(repository = get()) }
 }

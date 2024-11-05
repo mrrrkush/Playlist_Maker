@@ -29,8 +29,14 @@
         <item name="android:textAppearance">@font/ys_display_medium</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_main_22sp</item>
-        <item name="android:padding">@dimen/icons_and_settings_12dp</item>
 
+
+    </style>
+
+    <style name="SettingsColor">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAppearance">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
     </style>
 
     <style name="SettingsTextDarkTheme">
@@ -255,12 +261,8 @@
         <item name="hintTextColor">@color/blue</item>
     </style>
 
-    <style name="NewPlaylist_textview_style">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="NewPlaylistTvStyle">
         <item name="android:textSize">12sp</item>
-        <item name="android:lines">1</item>
-        <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -272,5 +274,16 @@
     <style name="View_color">
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="PlaylistBackground" parent="Theme.PlaylistMaker">
+    <item name="colorPrimary">@color/grey_search</item>
+    <item name="colorPrimaryVariant">@color/grey_search</item>
+    <item name="colorOnSecondary">@color/grey_search</item>
+    <item name="colorOnPrimary">@color/grey_search</item>
+    <item name="colorSecondary">@color/grey_search</item>
+    <item name="colorSecondaryVariant">@color/grey_search</item>
+    <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    <item name="android:background">@color/grey_search</item>
+</style>
 
 </resources>

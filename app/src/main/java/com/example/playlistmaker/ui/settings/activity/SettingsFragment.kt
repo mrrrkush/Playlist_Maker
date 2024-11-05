@@ -34,10 +34,6 @@ class SettingsFragment : Fragment() {
             insets
         }
 
-        binding.backFromSettings.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
-
         binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             viewModel.switchTheme(isChecked)
         }
